@@ -123,17 +123,48 @@ The `revalidate` timers are a safety net for a missed invalidation, not the mech
 
 ---
 
+## Live
+
+|             |                                             |
+| ----------- | ------------------------------------------- |
+| Public site | https://bcm10news.vercel.app                |
+| Newsroom    | https://bcm10news-admin.vercel.app          |
+| Database    | Supabase `kzlquigwistjdscnwilh`, ap-south-1 |
+| Media       | Cloudflare R2 `bcm10news`                   |
+| Repository  | https://github.com/bhuvan0808/bcm10news     |
+
+Both apps deploy automatically from `main`.
+
+Custom domains are not connected yet — see [`docs/dns.md`](docs/dns.md) for the
+nameserver move and every record to add.
+
+## Verifying a deployment
+
+```bash
+SUPABASE_ACCESS_TOKEN=... SUPABASE_PROJECT_REF=... node scripts/verify-database.mjs
+R2_ACCOUNT_ID=... R2_ACCESS_KEY_ID=... ... npx tsx scripts/verify-storage.mjs
+```
+
+The first asks the live database to break its own rules and checks it refuses —
+21 checks covering the state machine, the publish grant, privilege escalation
+and the paywall. The second signs an upload, PUTs it as a browser would, reads
+it back from the CDN and compares bytes.
+
 ## Status
 
-| Area                             | State                                                 |
-| -------------------------------- | ----------------------------------------------------- |
-| Database, RLS, workflow triggers | Complete                                              |
-| Public site                      | Complete                                              |
-| Newsroom CMS                     | Complete — editor, review, media, schedule            |
-| Email, push, analytics, errors   | Wired, dormant until keys are set                     |
-| Payments                         | Wired end to end; needs a Razorpay account to go live |
-| B2B licensing                    | Schema and quota logic complete; admin UI outstanding |
-| Comments                         | Schema and moderation policy complete; UI outstanding |
-| E2E tests                        | Outstanding                                           |
+| Area                             | State                                                          |
+| -------------------------------- | -------------------------------------------------------------- |
+| Database, RLS, workflow triggers | Live and verified                                              |
+| Public site                      | Live                                                           |
+| Newsroom CMS                     | Live — editor, review, media, schedule                         |
+| Email, push, analytics, errors   | Configured; email needs domain verification                    |
+| Payments                         | Wired end to end; needs Razorpay credentials                   |
+| Google sign-in                   | Needs OAuth credentials; magic link works today                |
+| Scheduled publishing             | Running on GitHub Actions every 5 min — see `apps/web/CRON.md` |
+| B2B licensing                    | Schema and quota logic complete; admin UI outstanding          |
+| Comments                         | Schema and moderation policy complete; UI outstanding          |
+| Image variants                   | Column and delivery code exist; generation outstanding         |
+| E2E browser tests                | Outstanding                                                    |
 
-See `docs/deployment.md` for what to do next.
+See [`docs/credentials.md`](docs/credentials.md) for what to rotate and
+[`docs/dns.md`](docs/dns.md) for what to do next.
