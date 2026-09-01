@@ -40,6 +40,7 @@ export default async function NewsroomLayout({ children }: { children: React.Rea
         isEditorial: session.isEditorial,
         isAdmin: session.isAdmin,
         canPublish: session.canPublish,
+        mustChangePassword: session.mustChangePassword,
       }}
       counts={{
         reviewQueue: reviewQueue.count ?? 0,

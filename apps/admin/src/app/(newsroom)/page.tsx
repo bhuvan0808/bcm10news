@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { createClient } from '@bcm10/database/server';
 import { getNewsroomCounts, listNewsroomArticles } from '@bcm10/database';
 import { StatusBadge } from '@/components/status-badge';
-import { requireNewsroomUser } from '@/lib/auth';
+import { requireNewsroomUserWithPassword } from '@/lib/auth';
 import { formatRelative } from '@/lib/format';
 
 export const metadata = { title: 'Dashboard' };
@@ -21,7 +21,7 @@ export const metadata = { title: 'Dashboard' };
  * already done that is not going out.
  */
 export default async function DashboardPage() {
-  const session = await requireNewsroomUser();
+  const session = await requireNewsroomUserWithPassword();
   const supabase = await createClient();
 
   const [counts, needsAttention, recent, queue] = await Promise.all([

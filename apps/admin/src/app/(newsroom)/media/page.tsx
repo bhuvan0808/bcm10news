@@ -1,6 +1,6 @@
 import { createClient } from '@bcm10/database/server';
 import { MediaGrid } from '@/components/media-grid';
-import { requireNewsroomUser } from '@/lib/auth';
+import { requireNewsroomUserWithPassword } from '@/lib/auth';
 
 export const metadata = { title: 'Media library' };
 
@@ -21,7 +21,7 @@ export default async function MediaPage({
 }: {
   searchParams: Promise<{ q?: string; page?: string; mine?: string }>;
 }) {
-  const session = await requireNewsroomUser('/media');
+  const session = await requireNewsroomUserWithPassword('/media');
   const supabase = await createClient();
   const params = await searchParams;
 

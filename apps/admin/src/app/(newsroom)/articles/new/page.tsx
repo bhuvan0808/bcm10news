@@ -2,7 +2,7 @@ import { createClient } from '@bcm10/database/server';
 import { getAllCategories } from '@bcm10/database';
 import { EMPTY_DOC } from '@bcm10/validation';
 import { ArticleForm } from '@/components/article-form';
-import { requireNewsroomUser } from '@/lib/auth';
+import { requireNewsroomUserWithPassword } from '@/lib/auth';
 
 export const metadata = { title: 'New story' };
 
@@ -14,7 +14,7 @@ export const metadata = { title: 'New story' };
  * blanks every time someone opened this page by accident.
  */
 export default async function NewArticlePage() {
-  const session = await requireNewsroomUser('/articles/new');
+  const session = await requireNewsroomUserWithPassword('/articles/new');
   const supabase = await createClient();
 
   const [categories, locations] = await Promise.all([

@@ -1,89 +1,125 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@bcm10/database/browser';
 import { Button, Field, Input } from '@bcm10/ui';
 
 /**
- * Sign-in.
+ * Newsroom sign-in.
  *
- * Two routes in, both passwordless:
+ * Three ways in, in the order they matter to this newsroom:
  *
- *  • Google, for staff on newsroom accounts. It is what most reporters
- *    already have, and it moves password policy to Google.
- *  • A magic link, for anyone whose email is not on Google Workspace, and as
- *    the fallback when OAuth is misconfigured.
+ *  • Email and password — how a reporter whose account an editor created signs
+ *    in. They are made to replace the temporary password on first use.
+ *  • Google — for staff on Google accounts, once OAuth is configured.
+ *  • Magic link — the fallback when someone has forgotten their password and
+ *    the desk is not around to reset it.
  *
- * There is no password field on purpose. A shared newsroom laptop and a
- * remembered password is the most common way newsroom accounts leak.
+ * There is no self-service sign-up. `shouldCreateUser: false` on the magic link
+ * means an unknown address gets nothing, so the newsroom cannot be joined by
+ * anyone an editor has not added.
  */
+type Mode = 'password' | 'link';
+type Status = 'idle' | 'working' | 'sent' | 'error';
+
 export function SignInForm({ next }: { next: string }) {
+  const router = useRouter();
+  const [mode, setMode] = useState<Mode>('password');
   const [email, setEmail] = useState('');
-  const [state, setState] = useState<{
-    status: 'idle' | 'sending' | 'sent' | 'error';
-    message?: string;
-  }>({
-    status: 'idle',
-  });
+  const [password, setPassword] = useState('');
+  const [status, setStatus] = useState<Status>('idle');
+  const [message, setMessage] = useState<string | null>(null);
 
   const callbackUrl = () =>
     `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
+  const signInWithPassword = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setStatus('working');
+    setMessage(null);
+
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+
+    if (error) {
+      // Deliberately vague: naming which half was wrong tells an attacker
+      // which addresses have newsroom accounts.
+      setStatus('error');
+      setMessage(
+        error.message.toLowerCase().includes('invalid')
+          ? 'That email and password do not match.'
+          : error.message
+      );
+      return;
+    }
+
+    // A full navigation, not router.push: the session cookie was just written
+    // and the server layout has to re-read it to decide where this person goes.
+    router.push(next);
+    router.refresh();
+  };
+
   const signInWithGoogle = async () => {
-    setState({ status: 'sending' });
+    setStatus('working');
     const supabase = createClient();
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: callbackUrl(),
-        // Ask for a refresh token and let the reporter pick an account —
-        // many have a personal and a work Google identity on one browser.
         queryParams: { access_type: 'offline', prompt: 'select_account' },
       },
     });
 
-    if (error) setState({ status: 'error', message: error.message });
+    if (error) {
+      setStatus('error');
+      setMessage(error.message);
+    }
   };
 
   const sendMagicLink = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!email.trim()) return;
 
-    setState({ status: 'sending' });
-    const supabase = createClient();
+    setStatus('working');
+    setMessage(null);
 
+    const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: {
-        emailRedirectTo: callbackUrl(),
-        // Newsroom accounts are created by an editor, not by self-signup.
-        shouldCreateUser: false,
-      },
+      options: { emailRedirectTo: callbackUrl(), shouldCreateUser: false },
     });
 
     if (error) {
-      setState({ status: 'error', message: error.message });
+      setStatus('error');
+      setMessage(error.message);
       return;
     }
 
-    setState({ status: 'sent' });
+    setStatus('sent');
   };
 
-  if (state.status === 'sent') {
+  if (status === 'sent') {
     return (
       <div role="status" className="text-center">
         <h2 className="text-base font-semibold text-ink">Check your email</h2>
         <p className="mt-2 text-sm text-ink-muted">
-          We sent a sign-in link to <strong className="text-ink">{email}</strong>. It expires in an
-          hour.
+          If <strong className="text-ink">{email}</strong> has a newsroom account, a sign-in link is
+          on its way. It expires in an hour.
         </p>
         <button
           type="button"
-          onClick={() => setState({ status: 'idle' })}
+          onClick={() => {
+            setStatus('idle');
+            setMode('password');
+          }}
           className="mt-4 text-sm font-medium text-brand hover:underline"
         >
-          Use a different email
+          Back to sign in
         </button>
       </div>
     );
@@ -91,12 +127,98 @@ export function SignInForm({ next }: { next: string }) {
 
   return (
     <div className="space-y-5">
+      {mode === 'password' ? (
+        <form onSubmit={signInWithPassword} className="space-y-3">
+          <Field label="Email" htmlFor="email">
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="reporter@bcm10news.in"
+              autoComplete="username"
+              required
+              invalid={status === 'error'}
+            />
+          </Field>
+
+          <Field label="Password" htmlFor="password">
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="current-password"
+              required
+              invalid={status === 'error'}
+            />
+          </Field>
+
+          <Button type="submit" size="lg" loading={status === 'working'} className="w-full">
+            Sign in
+          </Button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setMode('link');
+              setStatus('idle');
+              setMessage(null);
+            }}
+            className="w-full text-center text-sm text-ink-muted hover:text-brand"
+          >
+            Forgotten your password? Email me a link instead
+          </button>
+        </form>
+      ) : (
+        <form onSubmit={sendMagicLink} className="space-y-3">
+          <Field
+            label="Email"
+            htmlFor="email-link"
+            hint="We will send a one-time sign-in link to this address."
+          >
+            <Input
+              id="email-link"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="reporter@bcm10news.in"
+              autoComplete="username"
+              required
+              invalid={status === 'error'}
+            />
+          </Field>
+
+          <Button type="submit" size="lg" loading={status === 'working'} className="w-full">
+            Email me a sign-in link
+          </Button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setMode('password');
+              setStatus('idle');
+              setMessage(null);
+            }}
+            className="w-full text-center text-sm text-ink-muted hover:text-brand"
+          >
+            Use a password instead
+          </button>
+        </form>
+      )}
+
+      <div className="flex items-center gap-3">
+        <span className="h-px flex-1 bg-rule" />
+        <span className="text-xs tracking-wider text-ink-faint uppercase">or</span>
+        <span className="h-px flex-1 bg-rule" />
+      </div>
+
       <Button
         type="button"
         variant="outline"
         size="lg"
         onClick={signInWithGoogle}
-        loading={state.status === 'sending'}
+        loading={status === 'working'}
         className="w-full"
       >
         <svg viewBox="0 0 24 24" className="size-5" aria-hidden="true">
@@ -117,34 +239,9 @@ export function SignInForm({ next }: { next: string }) {
         Continue with Google
       </Button>
 
-      <div className="flex items-center gap-3">
-        <span className="h-px flex-1 bg-rule" />
-        <span className="text-xs tracking-wider text-ink-faint uppercase">or</span>
-        <span className="h-px flex-1 bg-rule" />
-      </div>
-
-      <form onSubmit={sendMagicLink} className="space-y-3">
-        <Field label="Work email" htmlFor="email">
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="reporter@bcm10news.in"
-            autoComplete="email"
-            required
-            invalid={state.status === 'error'}
-          />
-        </Field>
-
-        <Button type="submit" size="lg" loading={state.status === 'sending'} className="w-full">
-          Email me a sign-in link
-        </Button>
-      </form>
-
-      {state.status === 'error' ? (
+      {status === 'error' && message ? (
         <p role="alert" className="text-sm font-medium text-brand">
-          {state.message}
+          {message}
         </p>
       ) : null}
     </div>

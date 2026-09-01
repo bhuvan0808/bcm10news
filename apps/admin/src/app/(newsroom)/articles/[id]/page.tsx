@@ -5,7 +5,7 @@ import { contentDoc, EMPTY_DOC, type ContentDoc } from '@bcm10/validation';
 import { ArticleForm, type ArticleFormData } from '@/components/article-form';
 import { ReviewPanel } from '@/components/review-panel';
 import { StoryTimeline } from '@/components/story-timeline';
-import { requireNewsroomUser } from '@/lib/auth';
+import { requireNewsroomUserWithPassword } from '@/lib/auth';
 import { ADMIN } from '@/lib/site';
 
 export const metadata = { title: 'Edit story' };
@@ -20,7 +20,7 @@ export const metadata = { title: 'Edit story' };
  */
 export default async function EditArticlePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const session = await requireNewsroomUser(`/articles/${id}`);
+  const session = await requireNewsroomUserWithPassword(`/articles/${id}`);
   const supabase = await createClient();
 
   const article = (await getNewsroomArticle(supabase, id)) as ArticleRecord | null;

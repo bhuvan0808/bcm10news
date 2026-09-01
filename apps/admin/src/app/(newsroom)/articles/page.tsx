@@ -3,7 +3,7 @@ import { createClient } from '@bcm10/database/server';
 import { getAllCategories, listNewsroomArticles } from '@bcm10/database';
 import { articleQueryInput } from '@bcm10/validation';
 import { StatusBadge } from '@/components/status-badge';
-import { requireNewsroomUser } from '@/lib/auth';
+import { requireNewsroomUserWithPassword } from '@/lib/auth';
 import { formatRelative } from '@/lib/format';
 import { ADMIN } from '@/lib/site';
 
@@ -32,7 +32,7 @@ export default async function ArticlesPage({
 }: {
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
-  const session = await requireNewsroomUser();
+  const session = await requireNewsroomUserWithPassword();
   const supabase = await createClient();
   const params = await searchParams;
 

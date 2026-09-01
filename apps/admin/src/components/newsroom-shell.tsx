@@ -32,7 +32,10 @@ export function NewsroomShell({
   counts,
   children,
 }: {
-  session: Pick<NewsroomSession, 'profile' | 'isEditorial' | 'isAdmin' | 'canPublish'>;
+  session: Pick<
+    NewsroomSession,
+    'profile' | 'isEditorial' | 'isAdmin' | 'canPublish' | 'mustChangePassword'
+  >;
   counts: { reviewQueue: number; changesRequested: number };
   children: React.ReactNode;
 }) {
@@ -56,6 +59,7 @@ export function NewsroomShell({
     },
     { href: '/schedule', label: 'Scheduled', icon: <IconClock />, requires: 'editorial' },
     { href: '/media', label: 'Media library', icon: <IconImage /> },
+    { href: '/analytics', label: 'Analytics', icon: <IconChart />, requires: 'editorial' },
     { href: '/assignments', label: 'Assignments', icon: <IconClipboard /> },
     { href: '/people', label: 'People', icon: <IconUsers />, requires: 'admin' },
     { href: '/settings', label: 'Settings', icon: <IconCog />, requires: 'admin' },
@@ -68,6 +72,22 @@ export function NewsroomShell({
   });
 
   const displayName = session.profile.display_name || session.profile.full_name;
+
+  // An account still on its issued password gets no navigation. There is one
+  // thing to do, and offering links they cannot follow only confuses it.
+  if (session.mustChangePassword) {
+    return (
+      <div className="min-h-screen">
+        <div className="border-b border-rule bg-paper-raised px-4 py-3">
+          <span className="flex items-baseline gap-1">
+            <span className="text-lg font-black tracking-tight text-brand">BCM10</span>
+            <span className="text-sm font-semibold text-ink">Newsroom</span>
+          </span>
+        </div>
+        <main className="px-4 py-8">{children}</main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-[16rem_1fr]">
@@ -203,6 +223,13 @@ function Sidebar({
             </p>
           </div>
 
+          <Link
+            href="/account/password"
+            className="mb-2 block rounded-sm px-1 text-xs font-medium text-ink-muted hover:text-brand"
+          >
+            Change password
+          </Link>
+
           <div className="flex gap-2">
             <a
               href={ADMIN.publicSiteUrl}
@@ -310,6 +337,13 @@ function IconCog() {
     <svg {...iconProps}>
       <circle cx="12" cy="12" r="3.2" />
       <path d="M12 2.5v2.2M12 19.3v2.2M21.5 12h-2.2M4.7 12H2.5M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6M18.7 18.7l-1.6-1.6M6.9 6.9 5.3 5.3" />
+    </svg>
+  );
+}
+function IconChart() {
+  return (
+    <svg {...iconProps}>
+      <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
     </svg>
   );
 }
