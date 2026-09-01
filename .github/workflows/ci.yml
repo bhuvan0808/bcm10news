@@ -152,3 +152,71 @@ jobs:
             exit 1
           fi
           echo "Every public table has RLS enabled."
+
+  e2e:
+    name: End-to-end
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Runs against the deployed site rather than a dev server: RLS, cache
+    # invalidation and the paywall only behave correctly against a real database
+    # and CDN, and a mocked run would pass while production was broken.
+    #
+    # Only on push to main — a pull request from a fork has no deployment of its
+    # own to test, and pointing it at production would be worse than useless.
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+        working-directory: e2e
+
+      - name: Wait for the deployment to settle
+        run: sleep 90
+
+      - name: Run the suite
+        run: npx playwright test
+        working-directory: e2e
+        env:
+          E2E_SITE_URL: ${{ vars.E2E_SITE_URL || 'https://bcm10news.vercel.app' }}
+          E2E_ADMIN_URL: ${{ vars.E2E_ADMIN_URL || 'https://bcm10news-admin.vercel.app' }}
+          # Optional. The signed-in tests skip themselves when these are absent.
+          E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
+          E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: e2e/playwright-report/
+          retention-days: 7
+
+  embeds:
+    name: PostgREST embed check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # Needs the live schema to know which relationships are ambiguous, so it
+    # only runs where the Supabase token is available.
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check every embed names its constraint
+        if: env.SUPABASE_ACCESS_TOKEN != ''
+        run: node scripts/check-embeds.mjs
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
