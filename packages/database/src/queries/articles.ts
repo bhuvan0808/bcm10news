@@ -341,7 +341,11 @@ export async function getMostReadArticles(
     .order('views_24h', { ascending: false })
     .limit(limit);
 
-  const ids = (trending ?? []).map((row) => row.article_id);
+  // trending_articles is a materialized view, so its columns type as nullable
+  // even though the grouping key cannot be null.
+  const ids = (trending ?? [])
+    .map((row) => row.article_id)
+    .filter((id): id is string => Boolean(id));
 
   if (ids.length) {
     const { data } = await client.from('article_previews').select(PREVIEW_SELECT).in('id', ids);
@@ -439,6 +443,17 @@ export interface SitemapEntry {
   language: 'te' | 'en';
 }
 
+/** The view guarantees these columns; see the note on ArticlePreview. */
+type RawSitemapRow = {
+  slug: string | null;
+  title: string | null;
+  title_te: string | null;
+  updated_at: string | null;
+  published_at: string | null;
+  category_slug: string | null;
+  language: 'te' | 'en' | null;
+};
+
 /**
  * Published stories for sitemap generation.
  *
@@ -462,5 +477,22 @@ export async function getAllPublishedSlugs(
 
   const { data, error } = await query;
   if (error) throw error;
-  return (data ?? []) as SitemapEntry[];
+
+  return (
+    ((data ?? []) as RawSitemapRow[])
+      // A row missing a slug or a publish date cannot appear in a sitemap, so
+      // drop it rather than emitting a broken <url> entry.
+      .filter((row): row is RawSitemapRow & { slug: string; published_at: string } =>
+        Boolean(row.slug && row.published_at)
+      )
+      .map((row) => ({
+        slug: row.slug,
+        title: row.title ?? row.slug,
+        title_te: row.title_te,
+        updated_at: row.updated_at ?? row.published_at,
+        published_at: row.published_at,
+        category_slug: row.category_slug ?? '',
+        language: row.language ?? 'te',
+      }))
+  );
 }

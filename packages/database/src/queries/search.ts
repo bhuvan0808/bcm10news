@@ -51,7 +51,9 @@ export async function searchArticles(
 
   const { data, error } = await client.rpc('search_articles', {
     p_query: trimmed,
-    p_category_slug: categorySlug ?? null,
+    // The generated Args type makes this optional, so omit it rather than
+    // passing null.
+    p_category_slug: categorySlug ?? undefined,
     p_limit: perPage,
     p_offset: offset,
   });

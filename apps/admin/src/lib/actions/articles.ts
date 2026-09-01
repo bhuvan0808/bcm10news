@@ -242,7 +242,7 @@ export async function submitArticle(input: unknown): Promise<ActionResult> {
 
   const { error } = await supabase.rpc('submit_article', {
     p_article_id: parsed.data.id,
-    p_note: parsed.data.note ?? null,
+    p_note: parsed.data.note ?? undefined,
   });
 
   if (error) return fail(explain(error));
@@ -263,7 +263,7 @@ export async function reviewArticle(input: unknown): Promise<ActionResult> {
   const { error } = await supabase.rpc('review_article', {
     p_article_id: parsed.data.id,
     p_action: parsed.data.action,
-    p_comment: parsed.data.comment ?? null,
+    p_comment: parsed.data.comment ?? undefined,
   });
 
   if (error) return fail(explain(error));
@@ -297,7 +297,7 @@ export async function publishArticle(input: unknown): Promise<ActionResult<{ sta
 
   const { data: status, error } = await supabase.rpc('publish_article', {
     p_article_id: id,
-    p_scheduled_for: scheduledFor ? scheduledFor.toISOString() : null,
+    p_scheduled_for: scheduledFor ? scheduledFor.toISOString() : undefined,
   });
 
   if (error) return fail(explain(error));

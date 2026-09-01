@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { createClient } from '@bcm10/database/server';
+import { PREVIEW_SELECT, type ArticlePreview } from '@bcm10/database';
 import { formatPaise } from '@bcm10/validation';
 import { ArticleCard } from '@/components/article-card';
 import { ReaderSignIn } from './sign-in';
@@ -74,9 +75,11 @@ export default async function AccountPage({
     | null;
 
   const savedIds = (savedResult.data ?? []).map((row) => row.article_id);
-  const { data: savedArticles } = savedIds.length
-    ? await supabase.from('article_previews').select('*').in('id', savedIds)
+  const { data: savedRows } = savedIds.length
+    ? await supabase.from('article_previews').select(PREVIEW_SELECT).in('id', savedIds)
     : { data: [] };
+
+  const savedArticles = (savedRows ?? []) as unknown as ArticlePreview[];
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -143,7 +146,7 @@ export default async function AccountPage({
           Saved stories
         </h2>
 
-        {savedArticles?.length ? (
+        {savedArticles.length ? (
           <div className="mt-3 grid gap-5 sm:grid-cols-2">
             {savedArticles.map((article) => (
               <ArticleCard key={article.id} article={article} variant="standard" />

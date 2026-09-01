@@ -42,9 +42,9 @@ export async function POST(request: NextRequest) {
   const { error } = await supabase.rpc('record_article_view', {
     p_article_id: parsed.data.articleId,
     p_visitor_hash: hash,
-    p_referrer_host: parsed.data.referrerHost ?? null,
+    p_referrer_host: parsed.data.referrerHost ?? undefined,
     p_device_kind: deviceKind(request.headers.get('user-agent')),
-    p_read_depth: parsed.data.readDepth ?? null,
+    p_read_depth: parsed.data.readDepth ?? undefined,
   });
 
   if (error) {

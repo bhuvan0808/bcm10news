@@ -55,8 +55,53 @@ export type VideoSummary = Pick<
   | 'position'
 >;
 
-export type ArticlePreview = ArticlePreviewRow;
-export type Author = AuthorProfileRow;
+/**
+ * Postgres reports every column of a view as nullable, because it cannot prove
+ * non-nullness through a join. `article_previews` does guarantee these: its
+ * WHERE clause requires `status = 'published'` and `published_at <= now()`,
+ * and the joins to categories and profiles are inner joins on NOT NULL foreign
+ * keys.
+ *
+ * Narrowing here states that guarantee once, in the place it can be checked
+ * against the view definition, instead of forcing a null check at forty call
+ * sites that would never fire.
+ */
+type NonNullableFields<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]-?: NonNullable<T[P]>;
+};
+
+export type ArticlePreview = NonNullableFields<
+  ArticlePreviewRow,
+  | 'id'
+  | 'slug'
+  | 'title'
+  | 'language'
+  | 'author_id'
+  | 'author_name'
+  | 'category_id'
+  | 'category_slug'
+  | 'category_name'
+  | 'published_at'
+  | 'updated_at'
+  | 'is_breaking'
+  | 'is_exclusive'
+  | 'is_premium'
+  | 'is_featured'
+  | 'is_sponsored'
+  | 'noindex'
+  | 'priority'
+  | 'reading_time_minutes'
+  | 'word_count'
+  | 'view_count'
+  | 'comment_count'
+  | 'share_count'
+>;
+
+/** `author_profiles` filters on `slug is not null` and an active newsroom role. */
+export type Author = NonNullableFields<
+  AuthorProfileRow,
+  'id' | 'slug' | 'name' | 'role' | 'article_count'
+>;
 
 export interface GalleryItem {
   id: string;
