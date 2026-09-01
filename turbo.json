@@ -1,0 +1,74 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "stream",
+  "globalDependencies": [".env", "tsconfig.base.json"],
+  "globalEnv": [
+    "NODE_ENV",
+    "VERCEL_ENV",
+    "VERCEL_URL",
+    "NEXT_PUBLIC_SITE_URL",
+    "NEXT_PUBLIC_ADMIN_URL",
+    "NEXT_PUBLIC_MEDIA_URL",
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_JWT_SECRET",
+    "R2_ACCOUNT_ID",
+    "R2_ACCESS_KEY_ID",
+    "R2_SECRET_ACCESS_KEY",
+    "R2_BUCKET",
+    "R2_PUBLIC_BASE_URL",
+    "RESEND_API_KEY",
+    "RESEND_FROM_EMAIL",
+    "RESEND_WEBHOOK_SECRET",
+    "RAZORPAY_KEY_ID",
+    "RAZORPAY_KEY_SECRET",
+    "RAZORPAY_WEBHOOK_SECRET",
+    "NEXT_PUBLIC_RAZORPAY_KEY_ID",
+    "NEXT_PUBLIC_POSTHOG_KEY",
+    "NEXT_PUBLIC_POSTHOG_HOST",
+    "POSTHOG_API_KEY",
+    "NEXT_PUBLIC_SENTRY_DSN",
+    "SENTRY_AUTH_TOKEN",
+    "SENTRY_ORG",
+    "SENTRY_PROJECT",
+    "ONESIGNAL_APP_ID",
+    "ONESIGNAL_REST_API_KEY",
+    "NEXT_PUBLIC_ONESIGNAL_APP_ID",
+    "REVALIDATE_SECRET",
+    "CRON_SECRET"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "test:e2e": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}

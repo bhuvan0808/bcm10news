@@ -1,0 +1,66 @@
+# Supabase CLI configuration.
+#
+# The project targets HOSTED Supabase. Docker is not required for the normal
+# workflow — `supabase link` + `supabase db push` apply migrations over the
+# network. The [db]/[api] blocks below only matter if someone opts into the
+# local stack with `supabase start`.
+
+project_id = "bcm10-news"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 17
+
+[db.migrations]
+enabled = true
+
+[studio]
+enabled = true
+port = 54323
+
+[inbucket]
+enabled = true
+port = 54324
+
+[storage]
+enabled = true
+# Matches the 50 MB ceiling asserted by the media.size_bytes constraint.
+file_size_limit = "50MiB"
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = [
+  "http://localhost:3000/auth/callback",
+  "http://localhost:3001/auth/callback",
+  "https://bcm10news.in/auth/callback",
+  "https://admin.bcm10news.in/auth/callback",
+]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+double_confirm_changes = true
+secure_password_change = true
+
+[auth.external.google]
+enabled = true
+client_id = "env(SUPABASE_AUTH_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_GOOGLE_SECRET)"
+redirect_uri = ""
+skip_nonce_check = false
+
+[analytics]
+enabled = false
