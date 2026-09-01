@@ -268,6 +268,16 @@ export function ArticleForm({ initial, categories, locations, canPublish, isEdit
 
   return (
     <div className="mx-auto max-w-(--container-page) pb-24">
+      {/*
+        Every page needs exactly one h1. This form had none, so a screen-reader
+        user landing here had no way to tell what they were looking at. It is
+        visually hidden because the headline field immediately below is the real
+        visual title — repeating it on screen would be noise.
+      */}
+      <h1 className="sr-only">
+        {isNew ? 'New story' : `Editing: ${form.title || 'Untitled story'}`}
+      </h1>
+
       <StickyHeader
         status={form.status}
         save={save}

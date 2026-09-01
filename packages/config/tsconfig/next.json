@@ -8,6 +8,11 @@
     "moduleResolution": "Bundler",
     "noEmit": true,
     "allowJs": true,
-    "plugins": [{ "name": "next" }]
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "incremental": false
   }
 }

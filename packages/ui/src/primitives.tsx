@@ -158,9 +158,16 @@ export function Field({
       <label htmlFor={htmlFor} className="block text-sm font-medium text-ink">
         {label}
         {required ? (
-          <span className="ml-0.5 text-brand" aria-hidden="true">
-            *
-          </span>
+          <>
+            {/* The asterisk is decoration — screen readers do not reliably
+                announce it, and a red glyph conveys nothing to someone who
+                cannot see it. The visually hidden word is what actually gets
+                read out. */}
+            <span className="ml-0.5 text-brand" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (required)</span>
+          </>
         ) : null}
       </label>
 

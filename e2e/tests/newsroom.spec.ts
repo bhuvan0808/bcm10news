@@ -81,10 +81,13 @@ test.describe('signed in', () => {
     await page.goto(`${ADMIN}/articles/new`);
 
     const headline = `E2E probe ${Date.now()}`;
-    await page.getByLabel(/^headline$/i).fill(headline);
+    await page
+      .getByLabel(/headline/i)
+      .first()
+      .fill(headline);
 
     // Section is required before the story can move anywhere.
-    const section = page.getByLabel(/^section$/i);
+    const section = page.getByLabel(/^section/i);
     await section.selectOption({ index: 1 });
 
     await page.getByRole('button', { name: /create story/i }).click();
@@ -103,7 +106,10 @@ test.describe('signed in', () => {
     await expect(page.getByRole('heading', { name: /^analytics$/i })).toBeVisible();
     // Either real numbers or an honest empty state — never a crash.
     await expect(
-      page.getByText(/no readership recorded yet/i).or(page.getByText(/page views/i))
+      page
+        .getByText(/no readership recorded yet/i)
+        .or(page.getByLabel('Summary').getByText(/page views/i))
+        .first()
     ).toBeVisible();
   });
 
@@ -121,7 +127,7 @@ test.describe('signed in', () => {
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();
     await expect(dialog.getByLabel(/full name/i)).toBeVisible();
-    await expect(dialog.getByLabel(/^role$/i)).toBeVisible();
+    await expect(dialog.getByLabel(/^role/i)).toBeVisible();
 
     // Reporter is the default, and the extra-permissions block only appears for
     // it — publishing directly is the exception, not the norm.
