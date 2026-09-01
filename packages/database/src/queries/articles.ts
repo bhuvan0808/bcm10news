@@ -56,6 +56,18 @@ export async function getArticleBySlug(client: Client, slug: string): Promise<Ar
       .maybeSingle(),
   ]);
 
+  /*
+   * A failed query must never be mistaken for a withheld one.
+   *
+   * RLS filtering a row out returns `data: null` with no error, which is what
+   * "paywalled" means here. A genuine query failure also leaves `data` null —
+   * and silently reading that as "not entitled" once turned an ambiguous
+   * PostgREST embed into a paywall on every article on the site. Throwing
+   * surfaces it in the error boundary instead, where it is visible.
+   */
+  if (articleResult.error) throw articleResult.error;
+  if (previewResult.error) throw previewResult.error;
+
   const preview = (previewResult.data as ArticlePreview | null) ?? null;
   const article = (articleResult.data as unknown as ArticleDetail | null) ?? null;
 

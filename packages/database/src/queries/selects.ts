@@ -31,6 +31,11 @@ export const VIDEO_FIELDS = `
 /**
  * The full article, as the article page needs it.
  *
+ * `article_videos` is disambiguated by constraint name on purpose. Two foreign
+ * keys join these tables — article_videos.article_id for the list, and
+ * articles.featured_video_id for the lead video — so an unqualified embed is
+ * rejected with PGRST201 and takes the whole query with it.
+ *
  * The author is NOT joined here. profiles is not readable by anon (it holds
  * email and phone), so bylines come from the author_profiles view in a
  * separate, equally cacheable read.
@@ -48,7 +53,7 @@ export const ARTICLE_DETAIL_SELECT = `
   secondary_category:categories!articles_secondary_category_id_fkey(${CATEGORY_FIELDS}),
   location:locations!articles_location_id_fkey(${LOCATION_FIELDS}),
   featured_image:media!articles_featured_image_id_fkey(${MEDIA_FIELDS}),
-  videos:article_videos(${VIDEO_FIELDS}),
+  videos:article_videos!article_videos_article_id_fkey(${VIDEO_FIELDS}),
   gallery:article_media(id, role, position, caption, caption_te, media(${MEDIA_FIELDS})),
   article_tags(tag:tags(${TAG_FIELDS}))
 `;
