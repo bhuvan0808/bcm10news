@@ -60,7 +60,9 @@ export async function getHomepage(client: Client): Promise<HomepageSection[]> {
 
   const resolved = await Promise.all(
     sections.map(async (section) => {
-      const categorySlug = section.category_id ? (categorySlugById.get(section.category_id) ?? null) : null;
+      const categorySlug = section.category_id
+        ? (categorySlugById.get(section.category_id) ?? null)
+        : null;
       const articles = await fetchSectionArticles(client, section, categorySlug);
       return {
         key: section.key,
@@ -115,7 +117,9 @@ async function fetchSectionArticles(
       const ids = section.manual_article_ids ?? [];
       if (!ids.length) return [];
       const { data } = await client.from('article_previews').select(PREVIEW_SELECT).in('id', ids);
-      const byId = new Map((data ?? []).map((row) => [(row as ArticlePreview).id, row as ArticlePreview]));
+      const byId = new Map(
+        (data ?? []).map((row) => [(row as ArticlePreview).id, row as ArticlePreview])
+      );
       return ids.map((id) => byId.get(id)).filter((row): row is ArticlePreview => Boolean(row));
     }
 

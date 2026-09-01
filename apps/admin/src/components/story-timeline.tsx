@@ -35,8 +35,14 @@ export function StoryTimeline({
   if (!entries.length) return null;
 
   return (
-    <section aria-labelledby="timeline-heading" className="rounded-sm border border-rule bg-paper-raised p-4">
-      <h2 id="timeline-heading" className="text-xs font-bold uppercase tracking-wider text-ink-muted">
+    <section
+      aria-labelledby="timeline-heading"
+      className="rounded-sm border border-rule bg-paper-raised p-4"
+    >
+      <h2
+        id="timeline-heading"
+        className="text-xs font-bold tracking-wider text-ink-muted uppercase"
+      >
         History
       </h2>
 

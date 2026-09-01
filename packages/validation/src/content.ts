@@ -151,7 +151,11 @@ export function collectMediaIds(doc: ContentDoc): string[] {
     const items = node.attrs?.['items'];
     if (Array.isArray(items)) {
       for (const item of items) {
-        if (item && typeof item === 'object' && typeof (item as { mediaId?: unknown }).mediaId === 'string') {
+        if (
+          item &&
+          typeof item === 'object' &&
+          typeof (item as { mediaId?: unknown }).mediaId === 'string'
+        ) {
           ids.add((item as { mediaId: string }).mediaId);
         }
       }

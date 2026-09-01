@@ -9,3 +9,6 @@ test-results
 package-lock.json
 *.min.js
 supabase/.temp
+
+# Prettier has no SQL parser; migrations are hand-formatted.
+*.sql

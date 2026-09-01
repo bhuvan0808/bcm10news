@@ -131,7 +131,11 @@ function Sidebar({
   return (
     <>
       {drawerOpen ? (
-        <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={onClose} aria-hidden="true" />
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={onClose}
+          aria-hidden="true"
+        />
       ) : null}
 
       <aside
@@ -161,8 +165,7 @@ function Sidebar({
             {items.map((item) => {
               // Exact match for the dashboard; prefix match elsewhere, so
               // /articles/123/edit still highlights "Stories".
-              const active =
-                item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+              const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
               const badge = item.badgeKey ? counts[item.badgeKey] : 0;
 
               return (
@@ -195,7 +198,7 @@ function Sidebar({
           <div className="mb-2 px-1">
             <p className="truncate text-sm font-semibold text-ink">{displayName}</p>
             <p className="truncate text-xs text-ink-faint">{session.profile.email}</p>
-            <p className="mt-1 inline-block rounded-xs bg-paper-sunk px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ink-muted">
+            <p className="mt-1 inline-block rounded-xs bg-paper-sunk px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-ink-muted uppercase">
               {session.profile.role.replace(/_/g, ' ')}
             </p>
           </div>

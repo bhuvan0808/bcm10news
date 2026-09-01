@@ -100,15 +100,21 @@ export function ArticleForm({ initial, categories, locations, canPublish, isEdit
   const isNew = !form.id;
   const isPublished = form.status === 'published';
 
-  const update = useCallback(<K extends keyof ArticleFormData>(key: K, value: ArticleFormData[K]) => {
-    setForm((current) => ({ ...current, [key]: value }));
-    setSave({ kind: 'dirty' });
-  }, []);
+  const update = useCallback(
+    <K extends keyof ArticleFormData>(key: K, value: ArticleFormData[K]) => {
+      setForm((current) => ({ ...current, [key]: value }));
+      setSave({ kind: 'dirty' });
+    },
+    []
+  );
 
   // Headline drives the slug until it is edited by hand.
   useEffect(() => {
     if (slugTouched.current || !form.title.trim()) return;
-    setForm((current) => ({ ...current, slug: articleSlug({ title: current.title, titleTe: current.titleTe }) }));
+    setForm((current) => ({
+      ...current,
+      slug: articleSlug({ title: current.title, titleTe: current.titleTe }),
+    }));
   }, [form.title, form.titleTe]);
 
   /* ---- Autosave -------------------------------------------------------- */
@@ -208,7 +214,8 @@ export function ArticleForm({ initial, categories, locations, canPublish, isEdit
       });
 
       // createArticle redirects on success, so reaching here means it failed.
-      if (result && !result.ok) setBanner({ tone: 'error', message: result.message ?? 'Could not create the story.' });
+      if (result && !result.ok)
+        setBanner({ tone: 'error', message: result.message ?? 'Could not create the story.' });
     });
   };
 
@@ -255,7 +262,8 @@ export function ArticleForm({ initial, categories, locations, canPublish, isEdit
   /* ---- Derived --------------------------------------------------------- */
 
   const canSubmit = canTransition(form.status, 'submitted');
-  const canPublishNow = canPublish && (canTransition(form.status, 'published') || form.status === 'approved');
+  const canPublishNow =
+    canPublish && (canTransition(form.status, 'published') || form.status === 'approved');
   const parentCategories = useMemo(() => categories.filter((c) => !c.parent_id), [categories]);
 
   return (
@@ -303,7 +311,7 @@ export function ArticleForm({ initial, categories, locations, canPublish, isEdit
               onChange={(event) => update('title', event.target.value)}
               rows={2}
               placeholder="What happened?"
-              className="w-full resize-none rounded-sm border border-rule-strong bg-paper-raised px-3 py-2 text-xl font-bold leading-snug text-ink"
+              className="w-full resize-none rounded-sm border border-rule-strong bg-paper-raised px-3 py-2 text-xl leading-snug font-bold text-ink"
             />
           </Field>
 
@@ -318,11 +326,15 @@ export function ArticleForm({ initial, categories, locations, canPublish, isEdit
               value={form.titleTe}
               onChange={(event) => update('titleTe', event.target.value)}
               rows={2}
-              className="w-full resize-none rounded-sm border border-rule-strong bg-paper-raised px-3 py-2 text-lg font-bold leading-relaxed text-ink"
+              className="w-full resize-none rounded-sm border border-rule-strong bg-paper-raised px-3 py-2 text-lg leading-relaxed font-bold text-ink"
             />
           </Field>
 
-          <Field label="Standfirst" htmlFor="subtitle" hint="One line under the headline. Optional.">
+          <Field
+            label="Standfirst"
+            htmlFor="subtitle"
+            hint="One line under the headline. Optional."
+          >
             <Input
               id="subtitle"
               value={form.subtitle}
@@ -442,7 +454,11 @@ export function ArticleForm({ initial, categories, locations, canPublish, isEdit
                   alt=""
                   className="aspect-3/2 w-full rounded-sm object-cover"
                 />
-                <Field label="Alt text" htmlFor="featured-alt" hint="Describe the picture for readers who cannot see it.">
+                <Field
+                  label="Alt text"
+                  htmlFor="featured-alt"
+                  hint="Describe the picture for readers who cannot see it."
+                >
                   <Input
                     id="featured-alt"
                     value={form.featuredImage.alt}
@@ -464,10 +480,7 @@ export function ArticleForm({ initial, categories, locations, canPublish, isEdit
           </Panel>
 
           <Panel title="Video">
-            <VideoList
-              urls={form.videoUrls}
-              onChange={(urls) => update('videoUrls', urls)}
-            />
+            <VideoList urls={form.videoUrls} onChange={(urls) => update('videoUrls', urls)} />
           </Panel>
 
           <Panel title="Topics">
@@ -535,7 +548,7 @@ export function ArticleForm({ initial, categories, locations, canPublish, isEdit
             </Field>
 
             {form.slug ? (
-              <p className="-mt-1 break-all text-xs text-ink-faint">
+              <p className="-mt-1 text-xs break-all text-ink-faint">
                 {ADMIN.publicSiteUrl}/news/{form.slug}
               </p>
             ) : null}
@@ -656,7 +669,12 @@ function StickyHeader({
                       Schedule
                     </Button>
                   ) : null}
-                  <Button size="sm" onClick={() => onPublish(null)} loading={pending} disabled={!ready}>
+                  <Button
+                    size="sm"
+                    onClick={() => onPublish(null)}
+                    loading={pending}
+                    disabled={!ready}
+                  >
                     {status === 'published' ? 'Update live story' : 'Publish now'}
                   </Button>
                 </>
@@ -702,7 +720,7 @@ function SaveIndicator({ save }: { save: SaveState }) {
     return <span className="text-xs text-ink-faint">Saving…</span>;
   }
   if (save.kind === 'dirty') {
-    return <span className="text-xs text-status-changes">Unsaved changes</span>;
+    return <span className="text-status-changes text-xs">Unsaved changes</span>;
   }
   if (save.kind === 'error') {
     return (
@@ -715,7 +733,10 @@ function SaveIndicator({ save }: { save: SaveState }) {
     <span className="text-xs text-ink-faint">
       {save.at ? (
         <>
-          Saved <time dateTime={save.at} suppressHydrationWarning>{formatRelative(save.at)}</time>
+          Saved{' '}
+          <time dateTime={save.at} suppressHydrationWarning>
+            {formatRelative(save.at)}
+          </time>
         </>
       ) : (
         'Not saved yet'
@@ -727,7 +748,7 @@ function SaveIndicator({ save }: { save: SaveState }) {
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="rounded-sm border border-rule bg-paper-raised p-4">
-      <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-ink-muted">{title}</h2>
+      <h2 className="mb-3 text-xs font-bold tracking-wider text-ink-muted uppercase">{title}</h2>
       <div className="space-y-3">{children}</div>
     </section>
   );
@@ -795,7 +816,10 @@ function VideoList({ urls, onChange }: { urls: string[]; onChange: (urls: string
       {urls.map((url, index) => {
         const parsed = parseYouTubeUrl(url);
         return (
-          <div key={`${url}-${index}`} className="flex items-center gap-2 rounded-sm bg-paper-sunk p-2">
+          <div
+            key={`${url}-${index}`}
+            className="flex items-center gap-2 rounded-sm bg-paper-sunk p-2"
+          >
             {parsed ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img

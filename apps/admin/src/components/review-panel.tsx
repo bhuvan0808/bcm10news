@@ -69,9 +69,9 @@ export function ReviewPanel({
   return (
     <section
       aria-labelledby="review-heading"
-      className="rounded-sm border border-status-review/40 bg-status-review/5 p-4"
+      className="border-status-review/40 bg-status-review/5 rounded-sm border p-4"
     >
-      <h2 id="review-heading" className="text-sm font-bold text-status-review">
+      <h2 id="review-heading" className="text-status-review text-sm font-bold">
         Desk review
       </h2>
 

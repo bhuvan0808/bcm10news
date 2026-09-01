@@ -55,7 +55,11 @@ export async function requireNewsroomUser(returnTo?: string): Promise<NewsroomSe
     redirect(returnTo ? `/sign-in?next=${encodeURIComponent(returnTo)}` : '/sign-in');
   }
 
-  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle();
 
   if (!profile) {
     // The auth trigger creates a profile on sign-up, so a missing one means

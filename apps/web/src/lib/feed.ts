@@ -76,15 +76,17 @@ function renderItem(article: ArticlePreview): string {
 }
 
 export function escapeXml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
-    // Strip control characters that are illegal in XML 1.0 and make
-    // strict aggregator parsers reject the whole document.
-    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '');
+  return (
+    value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;')
+      // Strip control characters that are illegal in XML 1.0 and make
+      // strict aggregator parsers reject the whole document.
+      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')
+  );
 }
 
 export const FEED_HEADERS = {

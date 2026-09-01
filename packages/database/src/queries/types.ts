@@ -34,7 +34,10 @@ export type MediaSummary = Pick<
   | 'variants'
 >;
 
-export type CategorySummary = Pick<CategoryRow, 'id' | 'slug' | 'name' | 'name_te' | 'color' | 'parent_id'>;
+export type CategorySummary = Pick<
+  CategoryRow,
+  'id' | 'slug' | 'name' | 'name_te' | 'color' | 'parent_id'
+>;
 export type LocationSummary = Pick<LocationRow, 'id' | 'slug' | 'name' | 'name_te' | 'kind'>;
 export type TagSummary = Pick<TagRow, 'id' | 'slug' | 'name' | 'name_te'>;
 export type VideoSummary = Pick<

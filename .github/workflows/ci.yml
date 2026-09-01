@@ -1,0 +1,154 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A new push to a branch makes the previous run irrelevant. Cancelling it keeps
+# the queue short and the feedback fast.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Placeholders. The build must succeed without real credentials — CI checks
+  # that the code compiles, not that the vendors are reachable, and a workflow
+  # that needs production secrets cannot run on a fork's pull request.
+  NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+  SUPABASE_SERVICE_ROLE_KEY: placeholder-service-role-key
+  NEXT_PUBLIC_SITE_URL: https://bcm10news.in
+  NEXT_PUBLIC_ADMIN_URL: https://admin.bcm10news.in
+  REVALIDATE_SECRET: ci-placeholder-secret-value
+  CRON_SECRET: ci-placeholder-cron-secret
+
+jobs:
+  verify:
+    name: Lint, typecheck and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+  sql:
+    name: Migration sanity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    # A real Postgres, so the migrations are executed rather than merely read.
+    # This catches the errors that matter — a bad trigger, a policy that
+    # references a column that does not exist — before they reach the hosted
+    # project, where a half-applied migration is far more painful to unwind.
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: bcm10_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare the roles and schemas Supabase provides
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d bcm10_test <<'SQL'
+          -- Supabase supplies these; a bare Postgres does not. Recreating them
+          -- lets the migrations run unchanged.
+          create schema if not exists auth;
+          create schema if not exists extensions;
+
+          create table if not exists auth.users (
+            id uuid primary key default gen_random_uuid(),
+            email text,
+            raw_user_meta_data jsonb default '{}'::jsonb,
+            created_at timestamptz default now()
+          );
+
+          create or replace function auth.uid() returns uuid
+            language sql stable as $$ select null::uuid $$;
+
+          do $$ begin
+            create role anon nologin;
+          exception when duplicate_object then null; end $$;
+
+          do $$ begin
+            create role authenticated nologin;
+          exception when duplicate_object then null; end $$;
+
+          do $$ begin
+            create role service_role nologin bypassrls;
+          exception when duplicate_object then null; end $$;
+          SQL
+
+      - name: Apply migrations in order
+        env:
+          PGPASSWORD: postgres
+        run: |
+          set -e
+          for file in supabase/migrations/*.sql; do
+            echo "--- $file"
+            psql -h localhost -U postgres -d bcm10_test -v ON_ERROR_STOP=1 -f "$file"
+          done
+
+      - name: Apply the seed
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d bcm10_test -v ON_ERROR_STOP=1 -f supabase/seed.sql
+
+      - name: Re-apply the seed, to prove it is idempotent
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d bcm10_test -v ON_ERROR_STOP=1 -f supabase/seed.sql
+
+      - name: Check every public table has RLS enabled
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d bcm10_test -v ON_ERROR_STOP=1 --csv -t <<'SQL' > unprotected.csv
+          select c.relname
+          from pg_class c
+          join pg_namespace n on n.oid = c.relnamespace
+          where n.nspname = 'public'
+            and c.relkind = 'r'
+            and not c.relrowsecurity;
+          SQL
+          if [ -s unprotected.csv ]; then
+            echo "::error::These public tables have no RLS enabled:"
+            cat unprotected.csv
+            exit 1
+          fi
+          echo "Every public table has RLS enabled."

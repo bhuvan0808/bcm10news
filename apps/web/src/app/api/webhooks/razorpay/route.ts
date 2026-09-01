@@ -114,7 +114,8 @@ async function applyEvent(supabase: AdminClient, event: PaymentEvent): Promise<v
     case 'payment.captured':
     case 'subscription.charged': {
       await recordPayment(supabase, event, 'captured', profileId, organizationId);
-      if (planCode) await activateSubscription(supabase, event, planCode, profileId, organizationId);
+      if (planCode)
+        await activateSubscription(supabase, event, planCode, profileId, organizationId);
       break;
     }
 
@@ -135,7 +136,8 @@ async function applyEvent(supabase: AdminClient, event: PaymentEvent): Promise<v
     }
 
     case 'subscription.activated':
-      if (planCode) await activateSubscription(supabase, event, planCode, profileId, organizationId);
+      if (planCode)
+        await activateSubscription(supabase, event, planCode, profileId, organizationId);
       break;
 
     case 'subscription.cancelled':

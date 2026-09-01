@@ -106,7 +106,8 @@ export async function getArticleBySlug(client: Client, slug: string): Promise<Ar
   ]);
 
   const tags: TagSummary[] =
-    article?.article_tags?.map((row) => row.tag).filter((tag): tag is TagSummary => Boolean(tag)) ?? [];
+    article?.article_tags?.map((row) => row.tag).filter((tag): tag is TagSummary => Boolean(tag)) ??
+    [];
 
   return {
     access: article ? 'full' : 'paywalled',
@@ -129,12 +130,19 @@ async function getCoauthors(client: Client, articleId: string): Promise<Author[]
   const ids = (data ?? []).map((row) => row.profile_id).filter(Boolean);
   if (!ids.length) return [];
 
-  const { data: authors } = await client.from('author_profiles').select(AUTHOR_SELECT).in('id', ids);
+  const { data: authors } = await client
+    .from('author_profiles')
+    .select(AUTHOR_SELECT)
+    .in('id', ids);
   return (authors ?? []) as Author[];
 }
 
 export async function getAuthorById(client: Client, id: string): Promise<Author | null> {
-  const { data } = await client.from('author_profiles').select(AUTHOR_SELECT).eq('id', id).maybeSingle();
+  const { data } = await client
+    .from('author_profiles')
+    .select(AUTHOR_SELECT)
+    .eq('id', id)
+    .maybeSingle();
   return (data as Author | null) ?? null;
 }
 
@@ -337,7 +345,9 @@ export async function getMostReadArticles(
 
   if (ids.length) {
     const { data } = await client.from('article_previews').select(PREVIEW_SELECT).in('id', ids);
-    const byId = new Map((data ?? []).map((row) => [(row as ArticlePreview).id, row as ArticlePreview]));
+    const byId = new Map(
+      (data ?? []).map((row) => [(row as ArticlePreview).id, row as ArticlePreview])
+    );
     // Preserve the ranking order the view gave us.
     return ids.map((id) => byId.get(id)).filter((row): row is ArticlePreview => Boolean(row));
   }
@@ -373,9 +383,16 @@ export async function getRelatedArticles(
 
   let picked: ArticlePreview[] = [];
   if (curatedIds.length) {
-    const { data } = await client.from('article_previews').select(PREVIEW_SELECT).in('id', curatedIds);
-    const byId = new Map((data ?? []).map((row) => [(row as ArticlePreview).id, row as ArticlePreview]));
-    picked = curatedIds.map((id) => byId.get(id)).filter((row): row is ArticlePreview => Boolean(row));
+    const { data } = await client
+      .from('article_previews')
+      .select(PREVIEW_SELECT)
+      .in('id', curatedIds);
+    const byId = new Map(
+      (data ?? []).map((row) => [(row as ArticlePreview).id, row as ArticlePreview])
+    );
+    picked = curatedIds
+      .map((id) => byId.get(id))
+      .filter((row): row is ArticlePreview => Boolean(row));
   }
 
   if (picked.length >= limit) return picked.slice(0, limit);

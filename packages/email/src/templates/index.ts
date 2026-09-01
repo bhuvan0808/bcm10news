@@ -1,4 +1,11 @@
-import { button, escapeHtml, heading, paragraph, renderLayout, type LayoutOptions } from '../render';
+import {
+  button,
+  escapeHtml,
+  heading,
+  paragraph,
+  renderLayout,
+  type LayoutOptions,
+} from '../render';
 import type { SendEmailRequest } from '../types';
 
 /**

@@ -73,7 +73,13 @@ function SectionLayout({
       return (
         <div className="grid gap-6 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <ArticleCard article={first} variant="hero" priority={priority} locale={locale} showExcerpt />
+            <ArticleCard
+              article={first}
+              variant="hero"
+              priority={priority}
+              locale={locale}
+              showExcerpt
+            />
           </div>
 
           <div className="lg:col-span-5">
@@ -119,7 +125,7 @@ function SectionLayout({
      */
     case 'carousel':
       return (
-        <div className="-mx-4 overflow-x-auto px-4 pb-2 [scrollbar-width:thin]">
+        <div className="-mx-4 [scrollbar-width:thin] overflow-x-auto px-4 pb-2">
           <div className="flex snap-x snap-mandatory gap-4">
             {section.articles.map((article) => (
               <div key={article.id} className="w-64 shrink-0 snap-start sm:w-72">
@@ -148,7 +154,13 @@ function SectionLayout({
       return (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {section.articles.map((article) => (
-            <ArticleCard key={article.id} article={article} variant="standard" locale={locale} showCategory={false} />
+            <ArticleCard
+              key={article.id}
+              article={article}
+              variant="standard"
+              locale={locale}
+              showCategory={false}
+            />
           ))}
         </div>
       );

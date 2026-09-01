@@ -62,7 +62,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
               <Link href={articlePath(hit.slug)} className="group flex gap-4">
                 <div className="min-w-0 flex-1">
                   <span className="kicker">{hit.category_name}</span>
-                  <h2 className="clamp-2 mt-1 text-lg font-bold leading-snug text-ink group-hover:text-brand">
+                  <h2 className="clamp-2 mt-1 text-lg leading-snug font-bold text-ink group-hover:text-brand">
                     {hit.title}
                   </h2>
                   {hit.excerpt ? (
@@ -160,7 +160,11 @@ function NoResults({ query }: { query: string }) {
         <li>Check the spelling, or try fewer words.</li>
         <li>Try the Telugu spelling if you searched in English, or the other way round.</li>
         <li>
-          Browse a section instead — <Link href={categoryPath('latest-news')} className="text-brand hover:underline">latest news</Link>.
+          Browse a section instead —{' '}
+          <Link href={categoryPath('latest-news')} className="text-brand hover:underline">
+            latest news
+          </Link>
+          .
         </li>
       </ul>
     </div>

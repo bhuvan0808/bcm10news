@@ -38,7 +38,9 @@ export function RichTextEditor({
 }: {
   initialContent: ContentDoc;
   onChange: (doc: ContentDoc) => void;
-  onRequestImage?: (insert: (attributes: Parameters<Editor['commands']['insertNewsroomImage']>[0]) => void) => void;
+  onRequestImage?: (
+    insert: (attributes: Parameters<Editor['commands']['insertNewsroomImage']>[0]) => void
+  ) => void;
   placeholder?: string;
   editable?: boolean;
   language?: 'te' | 'en';
@@ -155,7 +157,9 @@ export function RichTextEditor({
 
   if (!editor) {
     // Matches the mounted editor's height so the form does not jump.
-    return <div className={cn('min-h-96 rounded-sm border border-rule bg-paper-raised', className)} />;
+    return (
+      <div className={cn('min-h-96 rounded-sm border border-rule bg-paper-raised', className)} />
+    );
   }
 
   const words = countWords(editor);

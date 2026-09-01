@@ -96,7 +96,9 @@ describe('interpretEvent', () => {
     const event = service.interpretEvent({
       id: 'evt_sub',
       event: 'subscription.activated',
-      payload: { subscription: { entity: { id: 'sub_1', status: 'active', notes: { profile_id: 'u1' } } } },
+      payload: {
+        subscription: { entity: { id: 'sub_1', status: 'active', notes: { profile_id: 'u1' } } },
+      },
     });
 
     expect(event).toMatchObject({ type: 'subscription.activated', subscriptionId: 'sub_1' });

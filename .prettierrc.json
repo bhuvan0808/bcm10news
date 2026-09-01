@@ -11,12 +11,10 @@
   "tailwindStylesheet": "./apps/web/src/app/globals.css",
   "overrides": [
     {
-      "files": "*.sql",
-      "options": { "printWidth": 120 }
-    },
-    {
       "files": "*.md",
-      "options": { "proseWrap": "preserve" }
+      "options": {
+        "proseWrap": "preserve"
+      }
     }
   ]
 }

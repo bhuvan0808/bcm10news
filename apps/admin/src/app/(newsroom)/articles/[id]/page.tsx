@@ -90,8 +90,8 @@ export default async function EditArticlePage({ params }: { params: Promise<{ id
       {/* Editor notes come first. A reporter opening a returned story must see
           why it came back before they see the form. */}
       {openNotes.length > 0 ? (
-        <section className="mx-auto max-w-(--container-page) rounded-sm border border-status-changes/40 bg-status-changes/5 p-4">
-          <h2 className="text-sm font-bold text-status-changes">Editor notes</h2>
+        <section className="border-status-changes/40 bg-status-changes/5 mx-auto max-w-(--container-page) rounded-sm border p-4">
+          <h2 className="text-status-changes text-sm font-bold">Editor notes</h2>
           <ul className="mt-2 space-y-2">
             {openNotes.map((note) => (
               <li key={note.id} className="text-sm text-ink">

@@ -10,7 +10,7 @@ export default function NoAccessPage() {
   return (
     <div className="flex min-h-screen items-center justify-center p-6">
       <div className="max-w-md text-center">
-        <p className="text-xs font-bold uppercase tracking-wider text-brand">Newsroom</p>
+        <p className="text-xs font-bold tracking-wider text-brand uppercase">Newsroom</p>
         <h1 className="mt-2 text-2xl font-bold text-ink">You do not have newsroom access</h1>
         <p className="mt-3 text-sm text-ink-muted">
           This account is signed in, but it has not been given a newsroom role. Ask an editor or the

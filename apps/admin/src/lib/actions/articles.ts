@@ -192,7 +192,11 @@ export async function saveArticle(input: unknown): Promise<ActionResult<{ savedA
 
   let previousSlug: string | null = null;
   if (draft.slug) {
-    const { data: current } = await supabase.from('articles').select('slug').eq('id', id).maybeSingle();
+    const { data: current } = await supabase
+      .from('articles')
+      .select('slug')
+      .eq('id', id)
+      .maybeSingle();
     if (current && current.slug !== draft.slug) {
       previousSlug = current.slug;
       patch['slug'] = await uniqueSlug(supabase, draft.slug, id);
@@ -210,7 +214,11 @@ export async function saveArticle(input: unknown): Promise<ActionResult<{ savedA
 
   // A published story that gets edited must refresh on the public site
   // immediately — this is the "we corrected the headline" path.
-  const { data: status } = await supabase.from('articles').select('status').eq('id', id).maybeSingle();
+  const { data: status } = await supabase
+    .from('articles')
+    .select('status')
+    .eq('id', id)
+    .maybeSingle();
   if (status?.status === 'published') {
     const subject = await buildRevalidateSubject(id, previousSlug);
     if (subject) await revalidatePublicSite(subject);
@@ -316,7 +324,11 @@ export async function unpublishArticle(id: string): Promise<ActionResult> {
 
   const supabase = await createClient();
 
-  const { data: current } = await supabase.from('articles').select('slug').eq('id', id).maybeSingle();
+  const { data: current } = await supabase
+    .from('articles')
+    .select('slug')
+    .eq('id', id)
+    .maybeSingle();
 
   const { error } = await supabase.from('articles').update({ status: 'draft' }).eq('id', id);
   if (error) return fail(explain(error));
@@ -378,7 +390,9 @@ async function syncRelations(
     if (tagIds.length) {
       await supabase
         .from('article_tags')
-        .insert(tagIds.map((tagId, index) => ({ article_id: articleId, tag_id: tagId, position: index })));
+        .insert(
+          tagIds.map((tagId, index) => ({ article_id: articleId, tag_id: tagId, position: index }))
+        );
     }
   }
 

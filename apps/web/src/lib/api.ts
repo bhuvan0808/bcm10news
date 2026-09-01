@@ -42,7 +42,10 @@ export function serverError(message = 'Something went wrong') {
  * `===` on a secret leaks its length and prefix through timing. This is the
  * same reasoning as the payment signature check, applied to our own tokens.
  */
-export function secretMatches(provided: string | null | undefined, expected: string | undefined): boolean {
+export function secretMatches(
+  provided: string | null | undefined,
+  expected: string | undefined
+): boolean {
   if (!provided || !expected) return false;
   const a = Buffer.from(provided, 'utf8');
   const b = Buffer.from(expected, 'utf8');
@@ -56,7 +59,10 @@ export function secretMatches(provided: string | null | undefined, expected: str
  * Accepts either `Authorization: Bearer <secret>` (how Vercel Cron calls us)
  * or `x-revalidate-secret` (how the admin app calls us).
  */
-export function authoriseInternal(request: NextRequest, secretEnvKey: 'REVALIDATE_SECRET' | 'CRON_SECRET'): boolean {
+export function authoriseInternal(
+  request: NextRequest,
+  secretEnvKey: 'REVALIDATE_SECRET' | 'CRON_SECRET'
+): boolean {
   const expected = process.env[secretEnvKey];
   if (!expected) return false;
 
@@ -84,7 +90,11 @@ export function visitorHash(request: NextRequest): string {
   const day = new Date().toISOString().slice(0, 10);
   const salt = process.env['REVALIDATE_SECRET'] ?? 'bcm10';
 
-  return crypto.createHash('sha256').update(`${day}:${salt}:${ip}:${userAgent}`).digest('hex').slice(0, 32);
+  return crypto
+    .createHash('sha256')
+    .update(`${day}:${salt}:${ip}:${userAgent}`)
+    .digest('hex')
+    .slice(0, 32);
 }
 
 /**

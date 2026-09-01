@@ -25,10 +25,14 @@ export class SupabaseMediaService implements MediaService {
   async createSignedUpload(request: SignUploadRequest): Promise<SignedUpload> {
     const storageKey = buildStorageKey({ kind: request.kind, mimeType: request.mimeType });
 
-    const { data, error } = await this.client.storage.from(this.bucket).createSignedUploadUrl(storageKey);
+    const { data, error } = await this.client.storage
+      .from(this.bucket)
+      .createSignedUploadUrl(storageKey);
 
     if (error || !data) {
-      throw new Error(`Could not sign upload for ${storageKey}: ${error?.message ?? 'unknown error'}`);
+      throw new Error(
+        `Could not sign upload for ${storageKey}: ${error?.message ?? 'unknown error'}`
+      );
     }
 
     return {
@@ -58,7 +62,9 @@ export class SupabaseMediaService implements MediaService {
     const folder = lastSlash === -1 ? '' : storageKey.slice(0, lastSlash);
     const name = storageKey.slice(lastSlash + 1);
 
-    const { data } = await this.client.storage.from(this.bucket).list(folder, { search: name, limit: 1 });
+    const { data } = await this.client.storage
+      .from(this.bucket)
+      .list(folder, { search: name, limit: 1 });
     return Boolean(data?.some((entry) => entry.name === name));
   }
 }

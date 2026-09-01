@@ -80,7 +80,9 @@ export async function listNewsroomArticles(
   if (input.to) query = query.lte('created_at', input.to.toISOString());
   if (input.search) {
     const escaped = input.search.replace(/[%_]/g, (match) => `\\${match}`);
-    query = query.or(`title.ilike.%${escaped}%,title_te.ilike.%${escaped}%,slug.ilike.%${escaped}%`);
+    query = query.or(
+      `title.ilike.%${escaped}%,title_te.ilike.%${escaped}%,slug.ilike.%${escaped}%`
+    );
   }
 
   switch (input.sort ?? 'updated_desc') {
@@ -103,7 +105,13 @@ export async function listNewsroomArticles(
   const items = (data ?? []) as unknown as NewsroomArticle[];
   const total = count ?? 0;
 
-  return { items: await attachAuthors(client, items), total, page, perPage, hasMore: offset + perPage < total };
+  return {
+    items: await attachAuthors(client, items),
+    total,
+    page,
+    perPage,
+    hasMore: offset + perPage < total,
+  };
 }
 
 /** Bylines for a page of results, in one query rather than N. */
@@ -111,7 +119,10 @@ async function attachAuthors(client: Client, items: NewsroomArticle[]): Promise<
   const ids = [...new Set(items.map((item) => item.author_id))];
   if (!ids.length) return items;
 
-  const { data } = await client.from('profiles').select('id, full_name, display_name').in('id', ids);
+  const { data } = await client
+    .from('profiles')
+    .select('id, full_name, display_name')
+    .in('id', ids);
   const byId = new Map(
     (data ?? []).map((row) => [row.id, { id: row.id, name: row.display_name || row.full_name }])
   );
@@ -158,7 +169,10 @@ export interface NewsroomCounts {
  * RLS already returns zero to a reporter, so the same call serves both the
  * reporter dashboard and the editor desk.
  */
-export async function getNewsroomCounts(client: Client, profileId: string): Promise<NewsroomCounts> {
+export async function getNewsroomCounts(
+  client: Client,
+  profileId: string
+): Promise<NewsroomCounts> {
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
 

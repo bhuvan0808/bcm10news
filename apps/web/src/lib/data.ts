@@ -130,13 +130,18 @@ export const cachedAuthorArticles = unstable_cache(
   { tags: [CacheTags.articles], revalidate: Revalidate.author }
 );
 
-export const cachedTag = unstable_cache(async (slug: string) => getTagBySlug(client(), slug), ['tag'], {
-  tags: [CacheTags.articles],
-  revalidate: Revalidate.tag,
-});
+export const cachedTag = unstable_cache(
+  async (slug: string) => getTagBySlug(client(), slug),
+  ['tag'],
+  {
+    tags: [CacheTags.articles],
+    revalidate: Revalidate.tag,
+  }
+);
 
 export const cachedTagArticles = unstable_cache(
-  async (slug: string, page: number, perPage: number) => getArticlesByTag(client(), slug, page, perPage),
+  async (slug: string, page: number, perPage: number) =>
+    getArticlesByTag(client(), slug, page, perPage),
   ['tag-articles'],
   { tags: [CacheTags.articles], revalidate: Revalidate.tag }
 );
@@ -155,7 +160,8 @@ export const cachedSitemapEntries = unstable_cache(
 
 /** Recent stories for the Google News sitemap, which only accepts 48 hours. */
 export const cachedNewsSitemapEntries = unstable_cache(
-  async () => getAllPublishedSlugs(client(), { since: new Date(Date.now() - 48 * 3600 * 1000), limit: 1000 }),
+  async () =>
+    getAllPublishedSlugs(client(), { since: new Date(Date.now() - 48 * 3600 * 1000), limit: 1000 }),
   ['news-sitemap-entries'],
   { tags: [CacheTags.sitemap], revalidate: 600 }
 );

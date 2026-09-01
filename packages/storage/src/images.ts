@@ -55,7 +55,9 @@ export function imageUrl(options: ImageSourceOptions, width?: number): string {
  * srcset covering the standard widths, capped at the image's intrinsic width
  * so the browser is never offered an upscale.
  */
-export function buildSrcSet(options: ImageSourceOptions & { intrinsicWidth?: number | null }): string {
+export function buildSrcSet(
+  options: ImageSourceOptions & { intrinsicWidth?: number | null }
+): string {
   const max = options.intrinsicWidth ?? Number.POSITIVE_INFINITY;
   const widths = WIDTHS.filter((width) => width <= max);
 

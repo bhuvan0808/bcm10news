@@ -31,7 +31,10 @@ export function formatDate(value: string | Date, locale: 'te' | 'en' = SITE.defa
   }).format(date);
 }
 
-export function formatDateTime(value: string | Date, locale: 'te' | 'en' = SITE.defaultLocale): string {
+export function formatDateTime(
+  value: string | Date,
+  locale: 'te' | 'en' = SITE.defaultLocale
+): string {
   const date = typeof value === 'string' ? new Date(value) : value;
   return formatter(locale === 'te' ? 'te-IN' : 'en-IN', {
     day: 'numeric',
@@ -92,7 +95,10 @@ export function formatCount(value: number, locale: 'te' | 'en' = SITE.defaultLoc
   }).format(value);
 }
 
-export function readingTimeLabel(minutes: number, locale: 'te' | 'en' = SITE.defaultLocale): string {
+export function readingTimeLabel(
+  minutes: number,
+  locale: 'te' | 'en' = SITE.defaultLocale
+): string {
   return locale === 'te' ? `${minutes} నిమిషాల పఠనం` : `${minutes} min read`;
 }
 

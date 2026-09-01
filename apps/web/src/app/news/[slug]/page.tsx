@@ -15,7 +15,12 @@ import { ShareBar } from '@/components/share-bar';
 import { JsonLd } from '@/components/json-ld';
 import { ArticleReadTracking } from './read-tracking';
 import { cachedArticle, cachedMostRead, cachedRelated } from '@/lib/data';
-import { articleMetadata, breadcrumbSchema, breadcrumbsForArticle, newsArticleSchema } from '@/lib/seo';
+import {
+  articleMetadata,
+  breadcrumbSchema,
+  breadcrumbsForArticle,
+  newsArticleSchema,
+} from '@/lib/seo';
 import { SITE, absoluteUrl, articlePath, authorPath, categoryPath } from '@/lib/site';
 import { formatDateTime, localised, readingTimeLabel } from '@/lib/format';
 
@@ -118,7 +123,7 @@ export default async function ArticlePage({ params }: PageProps) {
               {preview.is_sponsored ? <Badge tone="muted">Sponsored</Badge> : null}
             </div>
 
-            <h1 className="mt-2 text-3xl font-black leading-[1.15] tracking-tight text-ink sm:text-4xl lg:text-[2.75rem]">
+            <h1 className="mt-2 text-3xl leading-[1.15] font-black tracking-tight text-ink sm:text-4xl lg:text-[2.75rem]">
               {localised(preview.title, preview.title_te, locale)}
             </h1>
 
@@ -128,7 +133,12 @@ export default async function ArticlePage({ params }: PageProps) {
               </p>
             ) : null}
 
-            <Byline preview={preview} author={result.author} coauthors={result.coauthors} locale={locale} />
+            <Byline
+              preview={preview}
+              author={result.author}
+              coauthors={result.coauthors}
+              locale={locale}
+            />
           </header>
 
           {preview.featured_image_key ? (
@@ -198,7 +208,10 @@ export default async function ArticlePage({ params }: PageProps) {
           ) : null}
 
           {result.tags.length ? (
-            <nav aria-label="Topics" className="mt-8 flex flex-wrap gap-2 border-t border-rule pt-6">
+            <nav
+              aria-label="Topics"
+              className="mt-8 flex flex-wrap gap-2 border-t border-rule pt-6"
+            >
               {result.tags.map((tag) => (
                 <Link
                   key={tag.id}
@@ -223,7 +236,12 @@ export default async function ArticlePage({ params }: PageProps) {
               </h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {related.map((article) => (
-                  <ArticleCard key={article.id} article={article} variant="standard" locale={locale} />
+                  <ArticleCard
+                    key={article.id}
+                    article={article}
+                    variant="standard"
+                    locale={locale}
+                  />
                 ))}
               </div>
             </section>
@@ -364,7 +382,9 @@ function Byline({
 
       <span className="text-ink-faint">
         ·{' '}
-        <time dateTime={preview.published_at}>{formatDateTime(preview.published_at, locale)} IST</time>
+        <time dateTime={preview.published_at}>
+          {formatDateTime(preview.published_at, locale)} IST
+        </time>
       </span>
 
       <span className="text-ink-faint">

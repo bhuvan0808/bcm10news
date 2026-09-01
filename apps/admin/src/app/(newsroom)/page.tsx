@@ -77,7 +77,11 @@ export default async function DashboardPage() {
               tone={counts.reviewQueue > 0 ? 'alert' : 'default'}
             />
             <Tile label="Scheduled" value={counts.scheduled} href="/schedule" />
-            <Tile label="Published today" value={counts.publishedToday} href="/articles?status=published" />
+            <Tile
+              label="Published today"
+              value={counts.publishedToday}
+              href="/articles?status=published"
+            />
           </>
         ) : null}
       </section>
@@ -85,9 +89,9 @@ export default async function DashboardPage() {
       {needsAttention.items.length > 0 ? (
         <section
           aria-labelledby="attention-heading"
-          className="mt-8 rounded-sm border border-status-changes/30 bg-status-changes/5 p-4"
+          className="border-status-changes/30 bg-status-changes/5 mt-8 rounded-sm border p-4"
         >
-          <h2 id="attention-heading" className="text-sm font-bold text-status-changes">
+          <h2 id="attention-heading" className="text-status-changes text-sm font-bold">
             Needs your attention
           </h2>
           <p className="mt-0.5 text-xs text-ink-muted">
@@ -104,7 +108,10 @@ export default async function DashboardPage() {
       <div className="mt-8 grid gap-8 lg:grid-cols-2">
         <section aria-labelledby="mine-heading">
           <div className="flex items-baseline justify-between border-b border-rule pb-2">
-            <h2 id="mine-heading" className="text-sm font-bold uppercase tracking-wider text-ink-muted">
+            <h2
+              id="mine-heading"
+              className="text-sm font-bold tracking-wider text-ink-muted uppercase"
+            >
               My recent stories
             </h2>
             <Link href="/articles" className="text-xs font-semibold text-brand hover:underline">
@@ -130,7 +137,10 @@ export default async function DashboardPage() {
         {session.isEditorial ? (
           <section aria-labelledby="queue-heading">
             <div className="flex items-baseline justify-between border-b border-rule pb-2">
-              <h2 id="queue-heading" className="text-sm font-bold uppercase tracking-wider text-ink-muted">
+              <h2
+                id="queue-heading"
+                className="text-sm font-bold tracking-wider text-ink-muted uppercase"
+              >
                 Waiting for review
               </h2>
               <Link href="/review" className="text-xs font-semibold text-brand hover:underline">
@@ -145,7 +155,10 @@ export default async function DashboardPage() {
                 ))}
               </ul>
             ) : (
-              <EmptyState title="The queue is clear" body="Nothing is waiting on the desk right now." />
+              <EmptyState
+                title="The queue is clear"
+                body="Nothing is waiting on the desk right now."
+              />
             )}
           </section>
         ) : null}
@@ -169,7 +182,9 @@ function Tile({
     <Link
       href={href}
       className={`rounded-sm border p-3 transition-colors hover:border-rule-strong ${
-        tone === 'alert' ? 'border-status-changes/40 bg-status-changes/5' : 'border-rule bg-paper-raised'
+        tone === 'alert'
+          ? 'border-status-changes/40 bg-status-changes/5'
+          : 'border-rule bg-paper-raised'
       }`}
     >
       <p className="text-xs font-medium text-ink-muted">{label}</p>

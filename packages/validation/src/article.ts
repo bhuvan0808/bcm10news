@@ -89,10 +89,10 @@ export const articlePublishInput = z
     pushHeading: optionalText(120),
     pushMessage: optionalText(200),
   })
-  .refine(
-    (value) => !value.scheduledFor || value.scheduledFor.getTime() > Date.now() - 60_000,
-    { message: 'Scheduled time must be in the future', path: ['scheduledFor'] }
-  );
+  .refine((value) => !value.scheduledFor || value.scheduledFor.getTime() > Date.now() - 60_000, {
+    message: 'Scheduled time must be in the future',
+    path: ['scheduledFor'],
+  });
 
 export type ArticlePublishInput = z.infer<typeof articlePublishInput>;
 
@@ -108,7 +108,9 @@ export const articleQueryInput = z.object({
   isPremium: z.boolean().optional(),
   from: z.coerce.date().optional(),
   to: z.coerce.date().optional(),
-  sort: z.enum(['updated_desc', 'published_desc', 'created_desc', 'title_asc']).default('updated_desc'),
+  sort: z
+    .enum(['updated_desc', 'published_desc', 'created_desc', 'title_asc'])
+    .default('updated_desc'),
   page: z.coerce.number().int().min(1).default(1),
   perPage: z.coerce.number().int().min(1).max(100).default(25),
 });
@@ -120,17 +122,19 @@ export type ArticleQueryInput = z.infer<typeof articleQueryInput>;
  * The database is authoritative; this copy exists so the admin UI can grey out
  * a button instead of offering an action that will be rejected.
  */
-export const LEGAL_TRANSITIONS: Record<z.infer<typeof articleStatus>, z.infer<typeof articleStatus>[]> =
-  {
-    draft: ['draft', 'submitted', 'archived'],
-    submitted: ['in_review', 'changes_requested', 'approved', 'draft', 'archived'],
-    in_review: ['changes_requested', 'approved', 'submitted', 'archived'],
-    changes_requested: ['draft', 'submitted', 'archived'],
-    approved: ['scheduled', 'published', 'changes_requested', 'archived'],
-    scheduled: ['published', 'approved', 'changes_requested', 'archived'],
-    published: ['published', 'archived', 'draft'],
-    archived: ['draft', 'published'],
-  };
+export const LEGAL_TRANSITIONS: Record<
+  z.infer<typeof articleStatus>,
+  z.infer<typeof articleStatus>[]
+> = {
+  draft: ['draft', 'submitted', 'archived'],
+  submitted: ['in_review', 'changes_requested', 'approved', 'draft', 'archived'],
+  in_review: ['changes_requested', 'approved', 'submitted', 'archived'],
+  changes_requested: ['draft', 'submitted', 'archived'],
+  approved: ['scheduled', 'published', 'changes_requested', 'archived'],
+  scheduled: ['published', 'approved', 'changes_requested', 'archived'],
+  published: ['published', 'archived', 'draft'],
+  archived: ['draft', 'published'],
+};
 
 export function canTransition(
   from: z.infer<typeof articleStatus>,

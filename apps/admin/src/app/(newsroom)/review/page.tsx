@@ -84,9 +84,10 @@ function QueueSection({
       <div className="border-b border-rule pb-2">
         <h2
           id={`queue-${title.replace(/\s+/g, '-').toLowerCase()}`}
-          className="text-sm font-bold uppercase tracking-wider text-ink-muted"
+          className="text-sm font-bold tracking-wider text-ink-muted uppercase"
         >
-          {title} <span className="ml-1 font-normal normal-case text-ink-faint">({items.length})</span>
+          {title}{' '}
+          <span className="ml-1 font-normal text-ink-faint normal-case">({items.length})</span>
         </h2>
         <p className="mt-0.5 text-xs text-ink-faint">{description}</p>
       </div>
@@ -99,7 +100,7 @@ function QueueSection({
                 <div className="flex flex-wrap items-center gap-2">
                   <StatusBadge status={article.status} />
                   {article.is_breaking ? (
-                    <span className="rounded-xs bg-brand px-1.5 py-0.5 text-[10px] font-bold uppercase text-white">
+                    <span className="rounded-xs bg-brand px-1.5 py-0.5 text-[10px] font-bold text-white uppercase">
                       Breaking
                     </span>
                   ) : null}

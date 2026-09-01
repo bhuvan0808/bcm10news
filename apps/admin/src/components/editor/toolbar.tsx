@@ -69,11 +69,7 @@ export function EditorToolbar({
           <span className="underline">U</span>
         </ToolButton>
 
-        <ToolButton
-          label="Link"
-          active={editor.isActive('link')}
-          onClick={setLink}
-        >
+        <ToolButton label="Link" active={editor.isActive('link')} onClick={setLink}>
           <IconLink />
         </ToolButton>
       </Group>
@@ -120,7 +116,10 @@ export function EditorToolbar({
           <IconNumbers />
         </ToolButton>
 
-        <ToolButton label="Divider" onClick={() => editor.chain().focus().setHorizontalRule().run()}>
+        <ToolButton
+          label="Divider"
+          onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        >
           <IconRule />
         </ToolButton>
       </Group>

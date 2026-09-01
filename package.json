@@ -2,7 +2,7 @@
   "name": "bcm10-news",
   "version": "0.1.0",
   "private": true,
-  "description": "BCM10 News — production-grade digital news platform",
+  "description": "BCM10 News \u2014 production-grade digital news platform",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -21,8 +21,8 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "test:e2e": "turbo run test:e2e",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css,sql}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,css,sql}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
     "clean": "turbo run clean && rimraf node_modules",
     "db:link": "supabase link --project-ref $SUPABASE_PROJECT_REF",
     "db:push": "supabase db push --linked",
@@ -50,7 +50,7 @@
     "*.{ts,tsx,js,jsx}": [
       "prettier --write"
     ],
-    "*.{json,md,css,sql}": [
+    "*.{json,md,css}": [
       "prettier --write"
     ]
   }

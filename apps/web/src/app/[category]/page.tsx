@@ -78,7 +78,13 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
           {page === 1 && lead ? (
             <div className="mt-6 grid gap-6 lg:grid-cols-12">
               <div className="lg:col-span-7">
-                <ArticleCard article={lead} variant="hero" priority showExcerpt showCategory={false} />
+                <ArticleCard
+                  article={lead}
+                  variant="hero"
+                  priority
+                  showExcerpt
+                  showCategory={false}
+                />
               </div>
               <div className="lg:col-span-5">
                 {rest.slice(0, 4).map((article) => (
@@ -95,7 +101,12 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
 
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {(page === 1 ? rest.slice(4) : items).map((article) => (
-              <ArticleCard key={article.id} article={article} variant="standard" showCategory={false} />
+              <ArticleCard
+                key={article.id}
+                article={article}
+                variant="standard"
+                showCategory={false}
+              />
             ))}
           </div>
 

@@ -4,7 +4,9 @@ import { SLUG_PATTERN } from '../primitives';
 
 describe('slugify', () => {
   it('lowercases and hyphenates English headlines', () => {
-    expect(slugify('Cyclone Warning For Coastal Andhra')).toBe('cyclone-warning-for-coastal-andhra');
+    expect(slugify('Cyclone Warning For Coastal Andhra')).toBe(
+      'cyclone-warning-for-coastal-andhra'
+    );
   });
 
   it('preserves Telugu characters instead of dropping them', () => {

@@ -22,8 +22,8 @@
      each face and emits a hashed family name. Referencing the literal family
      names here would silently fall through to the system stack. */
   --font-sans:
-    var(--font-inter), var(--font-noto-sans-telugu), -apple-system, BlinkMacSystemFont,
-    'Segoe UI', 'Nirmala UI', 'Gautami', sans-serif;
+    var(--font-inter), var(--font-noto-sans-telugu), -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Nirmala UI', 'Gautami', sans-serif;
   --font-serif:
     var(--font-source-serif), var(--font-noto-serif-telugu), Georgia, 'Times New Roman', serif;
 

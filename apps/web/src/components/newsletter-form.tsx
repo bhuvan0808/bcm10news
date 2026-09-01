@@ -43,7 +43,10 @@ export function NewsletterForm({
       const payload = (await response.json()) as { message?: string };
 
       if (!response.ok) {
-        setState({ status: 'error', message: payload.message ?? 'Something went wrong. Try again.' });
+        setState({
+          status: 'error',
+          message: payload.message ?? 'Something went wrong. Try again.',
+        });
         return;
       }
 

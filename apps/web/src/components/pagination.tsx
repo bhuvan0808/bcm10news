@@ -28,7 +28,10 @@ export function Pagination({
   const pages = pageWindow(page, lastPage);
 
   return (
-    <nav aria-label="Pagination" className={cn('flex items-center justify-center gap-1', className)}>
+    <nav
+      aria-label="Pagination"
+      className={cn('flex items-center justify-center gap-1', className)}
+    >
       {page > 1 ? (
         <Link href={href(page - 1)} rel="prev" className={linkClass()}>
           ← Previous

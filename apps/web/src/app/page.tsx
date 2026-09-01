@@ -61,7 +61,8 @@ export default async function HomePage() {
         <div className="mx-auto max-w-lg text-center">
           <h2 className="text-2xl font-black tracking-tight text-ink">Get the morning briefing</h2>
           <p className="mt-2 text-sm text-ink-muted">
-            The stories shaping Andhra Pradesh and Telangana, in your inbox before you start the day.
+            The stories shaping Andhra Pradesh and Telangana, in your inbox before you start the
+            day.
           </p>
           <NewsletterForm source="homepage" className="mx-auto mt-5 max-w-md" />
         </div>
@@ -78,7 +79,9 @@ function EmptyState() {
   return (
     <div className="py-20 text-center">
       <p className="kicker">BCM10 News</p>
-      <h1 className="mt-2 text-3xl font-black tracking-tight text-ink">The presses are warming up</h1>
+      <h1 className="mt-2 text-3xl font-black tracking-tight text-ink">
+        The presses are warming up
+      </h1>
       <p className="mx-auto mt-3 max-w-md text-ink-muted">
         No stories have been published yet. Once the newsroom files its first report, it will appear
         here.

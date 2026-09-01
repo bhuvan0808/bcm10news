@@ -86,7 +86,12 @@ export type ServerEnv = z.infer<typeof serverEnvSchema>;
 export const serverEnv = serverEnvSchema.superRefine((env, ctx) => {
   if (env.MEDIA_DRIVER !== 'r2') return;
 
-  for (const key of ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_PUBLIC_BASE_URL'] as const) {
+  for (const key of [
+    'R2_ACCOUNT_ID',
+    'R2_ACCESS_KEY_ID',
+    'R2_SECRET_ACCESS_KEY',
+    'R2_PUBLIC_BASE_URL',
+  ] as const) {
     if (!env[key]) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -132,7 +137,9 @@ export function getServerEnv(source: NodeJS.ProcessEnv = process.env): ServerEnv
     const details = parsed.error.issues
       .map((issue) => `  • ${issue.path.join('.') || '(root)'}: ${issue.message}`)
       .join('\n');
-    throw new Error(`Invalid server environment:\n${details}\n\nSee .env.example for the full contract.`);
+    throw new Error(
+      `Invalid server environment:\n${details}\n\nSee .env.example for the full contract.`
+    );
   }
 
   cachedServerEnv = parsed.data;

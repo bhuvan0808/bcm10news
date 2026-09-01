@@ -76,7 +76,11 @@ export function SearchTrigger() {
         placeholder="Search news…"
         className="h-9 w-40 rounded-sm border border-rule-strong bg-paper-raised px-3 text-sm sm:w-56"
       />
-      <button type="submit" className="rounded-sm p-2 text-ink hover:bg-paper-sunk" aria-label="Search">
+      <button
+        type="submit"
+        className="rounded-sm p-2 text-ink hover:bg-paper-sunk"
+        aria-label="Search"
+      >
         <SearchIcon />
       </button>
     </form>

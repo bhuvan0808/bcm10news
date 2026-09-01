@@ -24,8 +24,12 @@ describe('parseYouTubeUrl', () => {
   });
 
   it('reads embed and live URLs', () => {
-    expect(parseYouTubeUrl('https://www.youtube.com/embed/dQw4w9WgXcQ')?.videoId).toBe('dQw4w9WgXcQ');
-    expect(parseYouTubeUrl('https://www.youtube.com/live/dQw4w9WgXcQ')?.videoId).toBe('dQw4w9WgXcQ');
+    expect(parseYouTubeUrl('https://www.youtube.com/embed/dQw4w9WgXcQ')?.videoId).toBe(
+      'dQw4w9WgXcQ'
+    );
+    expect(parseYouTubeUrl('https://www.youtube.com/live/dQw4w9WgXcQ')?.videoId).toBe(
+      'dQw4w9WgXcQ'
+    );
   });
 
   it('survives the tracking parameters a share link carries', () => {
@@ -80,6 +84,8 @@ describe('youtubeEmbedUrl', () => {
 
 describe('youtubeThumbnail', () => {
   it('defaults to hqdefault, which exists for every video', () => {
-    expect(youtubeThumbnail('dQw4w9WgXcQ')).toBe('https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg');
+    expect(youtubeThumbnail('dQw4w9WgXcQ')).toBe(
+      'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg'
+    );
   });
 });

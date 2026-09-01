@@ -1,5 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { CategoryRow, Database, LocationRow, SiteSettingsRow, TagRow } from '../generated/database.types';
+import type {
+  CategoryRow,
+  Database,
+  LocationRow,
+  SiteSettingsRow,
+  TagRow,
+} from '../generated/database.types';
 
 type Client = SupabaseClient<Database>;
 
@@ -27,7 +33,14 @@ export async function getNavigation(client: Client): Promise<NavCategory[]> {
   const byId = new Map<string, NavCategory>(
     rows.map((row) => [
       row.id,
-      { id: row.id, slug: row.slug, name: row.name, name_te: row.name_te, color: row.color, children: [] },
+      {
+        id: row.id,
+        slug: row.slug,
+        name: row.name,
+        name_te: row.name_te,
+        color: row.color,
+        children: [],
+      },
     ])
   );
 

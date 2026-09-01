@@ -47,10 +47,16 @@ export type AnalyticsEvent =
   | { name: 'payment_failed'; properties: { plan_code: string; reason?: string } }
   | { name: 'subscription_cancelled'; properties: { plan_code: string; reason?: string } }
   | { name: 'license_purchase'; properties: { organization_id: string; plan_code: string } }
-  | { name: 'license_usage'; properties: { organization_id: string; article_id: string; action: string } }
+  | {
+      name: 'license_usage';
+      properties: { organization_id: string; article_id: string; action: string };
+    }
   // Newsroom-side events, so editorial throughput is measurable too.
   | { name: 'story_submitted'; properties: { article_id: string; category: string } }
-  | { name: 'story_published'; properties: { article_id: string; category: string; minutes_in_review: number } };
+  | {
+      name: 'story_published';
+      properties: { article_id: string; category: string; minutes_in_review: number };
+    };
 
 export type AnalyticsEventName = AnalyticsEvent['name'];
 

@@ -34,7 +34,9 @@ export function createMediaService(options: {
   }
 
   if (!options.supabaseClient) {
-    throw new Error('MEDIA_DRIVER=supabase requires a Supabase client (use the service-role client).');
+    throw new Error(
+      'MEDIA_DRIVER=supabase requires a Supabase client (use the service-role client).'
+    );
   }
 
   return new SupabaseMediaService(

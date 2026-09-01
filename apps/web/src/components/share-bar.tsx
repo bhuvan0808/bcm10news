@@ -58,7 +58,9 @@ export function ShareBar({
 
   return (
     <div className={cn('flex flex-wrap items-center gap-2', className)}>
-      <span className="mr-1 text-xs font-semibold uppercase tracking-wider text-ink-faint">Share</span>
+      <span className="mr-1 text-xs font-semibold tracking-wider text-ink-faint uppercase">
+        Share
+      </span>
 
       <ShareLink
         href={`https://wa.me/?text=${encodedTitle}%20${encodedUrl}`}

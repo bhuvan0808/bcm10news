@@ -36,7 +36,11 @@ export interface SearchHit {
 export async function searchArticles(
   client: Client,
   query: string,
-  { categorySlug, page = 1, perPage = 20 }: { categorySlug?: string; page?: number; perPage?: number } = {}
+  {
+    categorySlug,
+    page = 1,
+    perPage = 20,
+  }: { categorySlug?: string; page?: number; perPage?: number } = {}
 ): Promise<Paginated<SearchHit>> {
   const trimmed = query.trim();
   if (trimmed.length < 2) {

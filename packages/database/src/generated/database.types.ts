@@ -56,28 +56,13 @@ export type MediaKind = 'image' | 'document' | 'audio' | 'avatar';
 export type VideoProvider = 'youtube';
 export type ContentLanguage = 'te' | 'en';
 export type SubscriptionStatus =
-  | 'incomplete'
-  | 'trialing'
-  | 'active'
-  | 'past_due'
-  | 'paused'
-  | 'cancelled'
-  | 'expired';
+  'incomplete' | 'trialing' | 'active' | 'past_due' | 'paused' | 'cancelled' | 'expired';
 export type PlanInterval = 'one_time' | 'monthly' | 'quarterly' | 'annual';
 export type PlanAudience = 'reader' | 'business';
 export type PaymentStatus =
-  | 'created'
-  | 'authorized'
-  | 'captured'
-  | 'refunded'
-  | 'partially_refunded'
-  | 'failed';
+  'created' | 'authorized' | 'captured' | 'refunded' | 'partially_refunded' | 'failed';
 export type EntitlementKind =
-  | 'premium_content'
-  | 'ad_light'
-  | 'newsletter_premium'
-  | 'content_license'
-  | 'api_access';
+  'premium_content' | 'ad_light' | 'newsletter_premium' | 'content_license' | 'api_access';
 export type NewsletterKind =
   | 'daily_digest'
   | 'morning_briefing'
@@ -133,7 +118,7 @@ export type ProfileRow = {
   last_seen_at: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type CategoryRow = {
   id: string;
@@ -152,7 +137,7 @@ export type CategoryRow = {
   seo_description: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type LocationRow = {
   id: string;
@@ -166,7 +151,7 @@ export type LocationRow = {
   is_active: boolean;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type TagRow = {
   id: string;
@@ -178,7 +163,7 @@ export type TagRow = {
   is_featured: boolean;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type MediaRow = {
   id: string;
@@ -211,7 +196,7 @@ export type MediaRow = {
   is_public: boolean;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type UploadTicketRow = {
   id: string;
@@ -224,7 +209,7 @@ export type UploadTicketRow = {
   consumed_at: string | null;
   expires_at: string;
   created_at: string;
-}
+};
 
 export type ArticleRow = {
   id: string;
@@ -270,7 +255,7 @@ export type ArticleRow = {
   word_count: number;
   created_at: string;
   updated_at: string;
-}
+};
 
 /** public.article_previews — safe, body-free projection of published stories. */
 export type ArticlePreviewRow = {
@@ -323,7 +308,7 @@ export type ArticlePreviewRow = {
   featured_image_height: number | null;
   featured_image_blur: string | null;
   featured_image_variants: Json;
-}
+};
 
 export type AuthorProfileRow = {
   id: string;
@@ -337,7 +322,7 @@ export type AuthorProfileRow = {
   role: UserRole;
   avatar_key: string | null;
   article_count: number;
-}
+};
 
 export type ArticleVideoRow = {
   id: string;
@@ -354,7 +339,7 @@ export type ArticleVideoRow = {
   position: number;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type ArticleMediaRow = {
   id: string;
@@ -365,7 +350,7 @@ export type ArticleMediaRow = {
   caption_te: string | null;
   position: number;
   created_at: string;
-}
+};
 
 export type ArticleRevisionRow = {
   id: string;
@@ -382,7 +367,7 @@ export type ArticleRevisionRow = {
   created_by: string | null;
   change_summary: string | null;
   created_at: string;
-}
+};
 
 export type ArticleStatusHistoryRow = {
   id: string;
@@ -393,7 +378,7 @@ export type ArticleStatusHistoryRow = {
   actor_id: string | null;
   note: string | null;
   created_at: string;
-}
+};
 
 export type EditorReviewRow = {
   id: string;
@@ -405,7 +390,7 @@ export type EditorReviewRow = {
   resolved_at: string | null;
   resolved_by: string | null;
   created_at: string;
-}
+};
 
 export type ArticleAssignmentRow = {
   id: string;
@@ -421,7 +406,7 @@ export type ArticleAssignmentRow = {
   completed_at: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type CommentRow = {
   id: string;
@@ -436,7 +421,7 @@ export type CommentRow = {
   moderated_at: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type SubscriptionPlanRow = {
   id: string;
@@ -458,7 +443,7 @@ export type SubscriptionPlanRow = {
   position: number;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type SubscriptionRow = {
   id: string;
@@ -478,7 +463,7 @@ export type SubscriptionRow = {
   metadata: Json;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type PaymentRow = {
   id: string;
@@ -499,7 +484,7 @@ export type PaymentRow = {
   paid_at: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type EntitlementRow = {
   id: string;
@@ -511,7 +496,7 @@ export type EntitlementRow = {
   expires_at: string | null;
   revoked_at: string | null;
   source: string;
-}
+};
 
 export type OrganizationRow = {
   id: string;
@@ -525,7 +510,7 @@ export type OrganizationRow = {
   notes: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type ContentLicenseRow = {
   id: string;
@@ -544,7 +529,7 @@ export type ContentLicenseRow = {
   is_active: boolean;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type HomepageSectionRow = {
   id: string;
@@ -571,7 +556,7 @@ export type HomepageSectionRow = {
   is_active: boolean;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type SiteSettingsRow = {
   id: boolean;
@@ -595,7 +580,7 @@ export type SiteSettingsRow = {
   announcement: string | null;
   updated_by: string | null;
   updated_at: string;
-}
+};
 
 export type NotificationRow = {
   id: string;
@@ -607,7 +592,7 @@ export type NotificationRow = {
   metadata: Json;
   read_at: string | null;
   created_at: string;
-}
+};
 
 export type NewsletterSubscriberRow = {
   id: string;
@@ -624,7 +609,7 @@ export type NewsletterSubscriberRow = {
   source: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type PushSubscriberRow = {
   id: string;
@@ -637,7 +622,7 @@ export type PushSubscriberRow = {
   is_active: boolean;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type AuditLogRow = {
   id: number;
@@ -652,14 +637,14 @@ export type AuditLogRow = {
   user_agent: string | null;
   request_id: string | null;
   created_at: string;
-}
+};
 
 export type TrendingArticleRow = {
   article_id: string;
   views_24h: number;
   views_1h: number;
   last_viewed_at: string;
-}
+};
 
 // -----------------------------------------------------------------------------
 // Table map
@@ -715,7 +700,10 @@ export type Database = {
         { article_id: string; profile_id: string; position: number },
         'article_id' | 'profile_id'
       >;
-      article_revisions: Table<ArticleRevisionRow, 'article_id' | 'version' | 'title' | 'body' | 'status'>;
+      article_revisions: Table<
+        ArticleRevisionRow,
+        'article_id' | 'version' | 'title' | 'body' | 'status'
+      >;
       article_status_history: Table<ArticleStatusHistoryRow, 'article_id' | 'to_status'>;
       editor_reviews: Table<EditorReviewRow, 'article_id' | 'reviewer_id' | 'action'>;
       article_assignments: Table<ArticleAssignmentRow, 'assigned_to' | 'assigned_by' | 'brief'>;
@@ -906,7 +894,10 @@ export type Database = {
         };
         Returns: string;
       };
-      submit_article: { Args: { p_article_id: string; p_note?: string | null }; Returns: ArticleStatus };
+      submit_article: {
+        Args: { p_article_id: string; p_note?: string | null };
+        Returns: ArticleStatus;
+      };
       review_article: {
         Args: { p_article_id: string; p_action: ReviewAction; p_comment?: string | null };
         Returns: ArticleStatus;
@@ -954,7 +945,7 @@ export type Database = {
     };
     CompositeTypes: Record<string, never>;
   };
-}
+};
 
 // Convenience aliases used across the workspace.
 export type Tables<T extends keyof Database['public']['Tables']> =

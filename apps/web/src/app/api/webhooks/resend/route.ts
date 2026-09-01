@@ -32,7 +32,8 @@ const EVENT_MAP: Record<string, string> = {
 
 export async function POST(request: NextRequest) {
   const secret = process.env['RESEND_WEBHOOK_SECRET'];
-  if (!secret) return json({ ok: false, message: 'Email webhooks are not configured' }, { status: 503 });
+  if (!secret)
+    return json({ ok: false, message: 'Email webhooks are not configured' }, { status: 503 });
 
   const rawBody = await request.text();
 
@@ -42,7 +43,15 @@ export async function POST(request: NextRequest) {
 
   if (!svixId || !svixTimestamp || !svixSignature) return unauthorized('Missing signature headers');
 
-  if (!verifySvix({ secret, id: svixId, timestamp: svixTimestamp, signature: svixSignature, body: rawBody })) {
+  if (
+    !verifySvix({
+      secret,
+      id: svixId,
+      timestamp: svixTimestamp,
+      signature: svixSignature,
+      body: rawBody,
+    })
+  ) {
     console.warn('Rejected Resend webhook: bad signature');
     return unauthorized('Invalid signature');
   }
@@ -127,7 +136,10 @@ function verifySvix({
   if (!Number.isFinite(age) || age > 300) return false;
 
   const key = Buffer.from(secret.replace(/^whsec_/, ''), 'base64');
-  const expected = crypto.createHmac('sha256', key).update(`${id}.${timestamp}.${body}`).digest('base64');
+  const expected = crypto
+    .createHmac('sha256', key)
+    .update(`${id}.${timestamp}.${body}`)
+    .digest('base64');
 
   return signature
     .split(' ')

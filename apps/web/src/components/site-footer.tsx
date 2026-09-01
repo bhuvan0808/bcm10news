@@ -46,11 +46,14 @@ export function SiteFooter({
           </div>
 
           <nav aria-label="Sections" className="md:col-span-4">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-ink-faint">Sections</h2>
+            <h2 className="text-xs font-bold tracking-wider text-ink-faint uppercase">Sections</h2>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               {navigation.slice(0, 12).map((category) => (
                 <li key={category.id}>
-                  <Link href={categoryPath(category.slug)} className="text-ink-muted hover:text-brand">
+                  <Link
+                    href={categoryPath(category.slug)}
+                    className="text-ink-muted hover:text-brand"
+                  >
                     {localised(category.name, category.name_te, locale)}
                   </Link>
                 </li>
@@ -59,7 +62,7 @@ export function SiteFooter({
           </nav>
 
           <div className="md:col-span-4">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-ink-faint">
+            <h2 className="text-xs font-bold tracking-wider text-ink-faint uppercase">
               Daily briefing
             </h2>
             <p className="mt-2 text-sm text-ink-muted">

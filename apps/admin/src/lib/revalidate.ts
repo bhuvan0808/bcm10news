@@ -23,7 +23,9 @@ export interface RevalidateSubject {
   previousSlug?: string | null;
 }
 
-export async function revalidatePublicSite(subject: RevalidateSubject): Promise<{ ok: boolean; error?: string }> {
+export async function revalidatePublicSite(
+  subject: RevalidateSubject
+): Promise<{ ok: boolean; error?: string }> {
   const secret = process.env['REVALIDATE_SECRET'];
 
   if (!secret) {

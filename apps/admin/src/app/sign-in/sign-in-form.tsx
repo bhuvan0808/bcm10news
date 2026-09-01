@@ -19,7 +19,10 @@ import { Button, Field, Input } from '@bcm10/ui';
  */
 export function SignInForm({ next }: { next: string }) {
   const [email, setEmail] = useState('');
-  const [state, setState] = useState<{ status: 'idle' | 'sending' | 'sent' | 'error'; message?: string }>({
+  const [state, setState] = useState<{
+    status: 'idle' | 'sending' | 'sent' | 'error';
+    message?: string;
+  }>({
     status: 'idle',
   });
 
@@ -116,7 +119,7 @@ export function SignInForm({ next }: { next: string }) {
 
       <div className="flex items-center gap-3">
         <span className="h-px flex-1 bg-rule" />
-        <span className="text-xs uppercase tracking-wider text-ink-faint">or</span>
+        <span className="text-xs tracking-wider text-ink-faint uppercase">or</span>
         <span className="h-px flex-1 bg-rule" />
       </div>
 

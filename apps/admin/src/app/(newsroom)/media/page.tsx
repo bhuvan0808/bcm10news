@@ -58,7 +58,10 @@ export default async function MediaPage({
         </div>
       </header>
 
-      <form method="get" className="mt-5 flex flex-wrap gap-2 rounded-sm border border-rule bg-paper-raised p-3">
+      <form
+        method="get"
+        className="mt-5 flex flex-wrap gap-2 rounded-sm border border-rule bg-paper-raised p-3"
+      >
         <input
           type="search"
           name="q"

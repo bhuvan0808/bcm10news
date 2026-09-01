@@ -132,17 +132,20 @@ export default async function ArticlesPage({
         <ul className="mt-5 divide-y divide-rule rounded-sm border border-rule bg-paper-raised">
           {items.map((article) => (
             <li key={article.id}>
-              <Link href={`/articles/${article.id}`} className="flex gap-3 p-3 hover:bg-paper-sunk/50">
+              <Link
+                href={`/articles/${article.id}`}
+                className="flex gap-3 p-3 hover:bg-paper-sunk/50"
+              >
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <StatusBadge status={article.status} />
                     {article.is_breaking ? (
-                      <span className="rounded-xs bg-brand px-1.5 py-0.5 text-[10px] font-bold uppercase text-white">
+                      <span className="rounded-xs bg-brand px-1.5 py-0.5 text-[10px] font-bold text-white uppercase">
                         Breaking
                       </span>
                     ) : null}
                     {article.is_premium ? (
-                      <span className="rounded-xs bg-premium-bg px-1.5 py-0.5 text-[10px] font-bold uppercase text-premium">
+                      <span className="rounded-xs bg-premium-bg px-1.5 py-0.5 text-[10px] font-bold text-premium uppercase">
                         Premium
                       </span>
                     ) : null}

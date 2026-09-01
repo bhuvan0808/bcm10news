@@ -9,7 +9,12 @@ import { cn } from '@bcm10/ui';
  * unreadable to them.
  */
 const STATUS: Record<ArticleStatus, { label: string; dot: string; text: string; bg: string }> = {
-  draft: { label: 'Draft', dot: 'bg-status-draft', text: 'text-status-draft', bg: 'bg-status-draft/10' },
+  draft: {
+    label: 'Draft',
+    dot: 'bg-status-draft',
+    text: 'text-status-draft',
+    bg: 'bg-status-draft/10',
+  },
   submitted: {
     label: 'Submitted',
     dot: 'bg-status-submitted',

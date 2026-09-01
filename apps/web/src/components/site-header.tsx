@@ -52,7 +52,9 @@ export function SiteHeader({
             <MobileNav navigation={navigation} locale={locale} />
 
             <Link href="/" className="flex items-baseline gap-1.5" aria-label={`${SITE.name} home`}>
-              <span className="text-2xl font-black tracking-tight text-brand sm:text-3xl">BCM10</span>
+              <span className="text-2xl font-black tracking-tight text-brand sm:text-3xl">
+                BCM10
+              </span>
               <span className="text-lg font-semibold tracking-tight text-ink sm:text-xl">News</span>
             </Link>
           </div>
@@ -72,9 +74,9 @@ export function SiteHeader({
             wrapping to three rows and pushing the story below the fold. */}
         <nav
           aria-label="Sections"
-          className="-mx-4 hidden overflow-x-auto px-4 md:block [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="-mx-4 hidden [scrollbar-width:none] overflow-x-auto px-4 md:block [&::-webkit-scrollbar]:hidden"
         >
-          <ul className="flex items-center gap-1 whitespace-nowrap pb-2 text-sm font-semibold">
+          <ul className="flex items-center gap-1 pb-2 text-sm font-semibold whitespace-nowrap">
             {navigation.map((category) => (
               <li key={category.id} className="group relative">
                 <Link
@@ -85,7 +87,7 @@ export function SiteHeader({
                 </Link>
 
                 {category.children.length > 0 ? (
-                  <ul className="invisible absolute left-0 top-full z-50 min-w-44 rounded-sm border border-rule bg-paper-raised py-1 opacity-0 shadow-lg transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                  <ul className="invisible absolute top-full left-0 z-50 min-w-44 rounded-sm border border-rule bg-paper-raised py-1 opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
                     {category.children.map((child) => (
                       <li key={child.id}>
                         <Link

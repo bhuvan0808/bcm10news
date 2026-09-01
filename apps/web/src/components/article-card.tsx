@@ -47,7 +47,14 @@ export function ArticleCard({
 
   if (variant === 'compact') {
     return (
-      <CompactCard article={article} title={title} href={href} rank={rank} locale={locale} className={className} />
+      <CompactCard
+        article={article}
+        title={title}
+        href={href}
+        rank={rank}
+        locale={locale}
+        className={className}
+      />
     );
   }
 
@@ -94,7 +101,7 @@ export function ArticleCard({
           )}
 
           {(article.is_breaking || article.is_premium) && (
-            <div className="absolute left-2 top-2 flex gap-1.5">
+            <div className="absolute top-2 left-2 flex gap-1.5">
               {article.is_breaking ? <Badge tone="brand">Breaking</Badge> : null}
               {article.is_premium ? <Badge tone="premium">Premium</Badge> : null}
             </div>
@@ -106,7 +113,7 @@ export function ArticleCard({
 
           <h3
             className={cn(
-              'mt-1 font-bold leading-snug text-ink transition-colors group-hover:text-brand',
+              'mt-1 leading-snug font-bold text-ink transition-colors group-hover:text-brand',
               isHero
                 ? 'clamp-3 text-2xl sm:text-3xl md:text-[2rem]'
                 : isLead
@@ -118,7 +125,12 @@ export function ArticleCard({
           </h3>
 
           {withExcerpt && article.excerpt ? (
-            <p className={cn('mt-2 text-ink-muted', isHero ? 'clamp-3 text-base' : 'clamp-2 text-sm')}>
+            <p
+              className={cn(
+                'mt-2 text-ink-muted',
+                isHero ? 'clamp-3 text-base' : 'clamp-2 text-sm'
+              )}
+            >
               {article.excerpt}
             </p>
           ) : null}
@@ -150,7 +162,7 @@ function ListCard({
       <Link href={href} className="flex gap-3 focus-visible:outline-offset-4">
         <div className="min-w-0 flex-1">
           {showCategory ? <CategoryKicker article={article} locale={locale} /> : null}
-          <h3 className="clamp-3 mt-1 font-bold leading-snug text-ink transition-colors group-hover:text-brand">
+          <h3 className="clamp-3 mt-1 leading-snug font-bold text-ink transition-colors group-hover:text-brand">
             {title}
           </h3>
           <CardMeta article={article} locale={locale} className="mt-1.5" />
@@ -197,7 +209,7 @@ function CompactCard({
       <Link href={href} className="flex gap-3 focus-visible:outline-offset-4">
         {rank !== undefined ? (
           <span
-            className="shrink-0 text-2xl font-black leading-none text-rule-strong tabular-nums"
+            className="shrink-0 text-2xl leading-none font-black text-rule-strong tabular-nums"
             aria-hidden="true"
           >
             {rank}
@@ -205,7 +217,7 @@ function CompactCard({
         ) : null}
 
         <div className="min-w-0">
-          <h3 className="clamp-3 text-sm font-semibold leading-snug text-ink transition-colors group-hover:text-brand">
+          <h3 className="clamp-3 text-sm leading-snug font-semibold text-ink transition-colors group-hover:text-brand">
             {title}
           </h3>
           <time
@@ -223,7 +235,9 @@ function CompactCard({
 
 function CategoryKicker({ article, locale }: { article: ArticlePreview; locale: 'te' | 'en' }) {
   return (
-    <span className="kicker">{localised(article.category_name, article.category_name_te, locale)}</span>
+    <span className="kicker">
+      {localised(article.category_name, article.category_name_te, locale)}
+    </span>
   );
 }
 
@@ -244,10 +258,16 @@ function CardMeta({
   locale: 'te' | 'en';
   className?: string;
 }) {
-  const byline = article.byline_override || localised(article.author_name, article.author_name_te, locale);
+  const byline =
+    article.byline_override || localised(article.author_name, article.author_name_te, locale);
 
   return (
-    <div className={cn('flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-ink-faint', className)}>
+    <div
+      className={cn(
+        'flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-ink-faint',
+        className
+      )}
+    >
       {byline ? <span className="font-medium text-ink-muted">{byline}</span> : null}
       <span aria-hidden="true">·</span>
       <time dateTime={article.published_at} suppressHydrationWarning>

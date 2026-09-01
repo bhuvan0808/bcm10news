@@ -219,17 +219,16 @@ export function websiteSchema() {
     publisher: organizationSchema(),
     potentialAction: {
       '@type': 'SearchAction',
-      target: { '@type': 'EntryPoint', urlTemplate: `${SITE.origin}/search?q={search_term_string}` },
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${SITE.origin}/search?q={search_term_string}`,
+      },
       'query-input': 'required name=search_term_string',
     },
   };
 }
 
-export function collectionSchema(options: {
-  name: string;
-  path: string;
-  items: ArticlePreview[];
-}) {
+export function collectionSchema(options: { name: string; path: string; items: ArticlePreview[] }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',

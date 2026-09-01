@@ -67,7 +67,7 @@ export function MediaGrid({
 
                     {missingAlt ? (
                       <span
-                        className="absolute left-1 top-1 rounded-xs bg-brand px-1 py-0.5 text-[10px] font-bold uppercase text-white"
+                        className="absolute top-1 left-1 rounded-xs bg-brand px-1 py-0.5 text-[10px] font-bold text-white uppercase"
                         title="This image has no alt text"
                       >
                         No alt
@@ -226,7 +226,11 @@ function MediaDetail({ media, onClose }: { media: MediaRow; onClose: () => void 
               />
             </Field>
 
-            <Field label="Internal title" htmlFor="media-title" hint="Only used for searching the library.">
+            <Field
+              label="Internal title"
+              htmlFor="media-title"
+              hint="Only used for searching the library."
+            >
               <Input
                 id="media-title"
                 value={form.title}

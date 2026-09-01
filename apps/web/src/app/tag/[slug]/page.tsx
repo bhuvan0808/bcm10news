@@ -46,7 +46,9 @@ export default async function TagPage({ params, searchParams }: PageProps) {
         <h1 className="mt-1 text-3xl font-black tracking-tight text-ink sm:text-4xl">
           #{localised(tag.name, tag.name_te, 'te')}
         </h1>
-        {tag.description ? <p className="mt-2 max-w-2xl text-ink-muted">{tag.description}</p> : null}
+        {tag.description ? (
+          <p className="mt-2 max-w-2xl text-ink-muted">{tag.description}</p>
+        ) : null}
       </header>
 
       {items.length ? (
