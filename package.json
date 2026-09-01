@@ -5,7 +5,8 @@
   "description": "BCM10 News \u2014 production-grade digital news platform",
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "e2e"
   ],
   "engines": {
     "node": ">=20.11.0"
@@ -20,10 +21,10 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "test:e2e": "turbo run test:e2e",
+    "test:e2e": "npm run test:e2e --workspace @bcm10/e2e",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
-    "clean": "turbo run clean && rimraf node_modules",
+    "clean": "turbo run clean && npm run clean:cache && rimraf node_modules",
     "db:link": "supabase link --project-ref $SUPABASE_PROJECT_REF",
     "db:push": "supabase db push --linked",
     "db:push:dry": "supabase db push --linked --dry-run",
@@ -33,7 +34,8 @@
     "db:start": "supabase start",
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
-    "prepare": "husky || true"
+    "prepare": "husky || true",
+    "clean:cache": "rimraf \"**/*.tsbuildinfo\" \"**/.next/types\""
   },
   "devDependencies": {
     "@types/node": "^22.10.5",

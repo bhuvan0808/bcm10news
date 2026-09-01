@@ -57,7 +57,8 @@
     },
     "typecheck": {
       "dependsOn": ["^build"],
-      "outputs": []
+      "outputs": [],
+      "inputs": ["src/**", "*.json", "*.ts", "*.tsx", ".next/types/**"]
     },
     "test": {
       "dependsOn": ["^build"],

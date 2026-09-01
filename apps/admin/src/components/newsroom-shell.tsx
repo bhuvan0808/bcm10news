@@ -23,7 +23,7 @@ interface NavItem {
   label: string;
   icon: React.ReactNode;
   /** Minimum capability required to see this item. */
-  requires?: 'editorial' | 'admin';
+  requires?: 'editorial' | 'admin' | 'commercial';
   badgeKey?: 'reviewQueue' | 'changesRequested';
 }
 
@@ -60,6 +60,8 @@ export function NewsroomShell({
     { href: '/schedule', label: 'Scheduled', icon: <IconClock />, requires: 'editorial' },
     { href: '/media', label: 'Media library', icon: <IconImage /> },
     { href: '/analytics', label: 'Analytics', icon: <IconChart />, requires: 'editorial' },
+    { href: '/comments', label: 'Comments', icon: <IconComment />, requires: 'editorial' },
+    { href: '/licensing', label: 'Licensing', icon: <IconBriefcase />, requires: 'commercial' },
     { href: '/assignments', label: 'Assignments', icon: <IconClipboard /> },
     { href: '/people', label: 'People', icon: <IconUsers />, requires: 'admin' },
     { href: '/settings', label: 'Settings', icon: <IconCog />, requires: 'admin' },
@@ -68,6 +70,9 @@ export function NewsroomShell({
   const visible = items.filter((item) => {
     if (item.requires === 'admin') return session.isAdmin;
     if (item.requires === 'editorial') return session.isEditorial;
+    if (item.requires === 'commercial') {
+      return session.isAdmin || session.profile.role === 'subscription_manager';
+    }
     return true;
   });
 
@@ -344,6 +349,21 @@ function IconChart() {
   return (
     <svg {...iconProps}>
       <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+    </svg>
+  );
+}
+function IconComment() {
+  return (
+    <svg {...iconProps}>
+      <path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.5-4.5A8 8 0 1 1 21 12Z" />
+    </svg>
+  );
+}
+function IconBriefcase() {
+  return (
+    <svg {...iconProps}>
+      <rect x="3" y="7" width="18" height="13" rx="2" />
+      <path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 12h18" />
     </svg>
   );
 }

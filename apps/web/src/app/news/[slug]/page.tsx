@@ -13,6 +13,7 @@ import { YouTubeEmbed } from '@/components/youtube-embed';
 import { Paywall } from '@/components/paywall';
 import { ShareBar } from '@/components/share-bar';
 import { JsonLd } from '@/components/json-ld';
+import { Comments } from '@/components/comments';
 import { ArticleReadTracking } from './read-tracking';
 import { cachedArticle, cachedMostRead, cachedRelated } from '@/lib/data';
 import {
@@ -225,6 +226,14 @@ export default async function ArticlePage({ params }: PageProps) {
           ) : null}
 
           <ShareBar url={url} title={preview.title} context={trackingContext} className="mt-6" />
+
+          {/* Comments render only when the site setting and the story flag are
+              both on; the component decides, so the page stays uncluttered. */}
+          <Comments
+            articleId={preview.id}
+            articleSlug={preview.slug}
+            allowComments={result.article?.allow_comments ?? false}
+          />
 
           {related.length ? (
             <section aria-labelledby="related-heading" className="mt-12">
