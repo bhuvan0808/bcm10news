@@ -412,14 +412,31 @@ export async function getVideoArticles(
   return (data ?? []) as ArticlePreview[];
 }
 
-/** Every published slug, for sitemap generation. */
+export interface SitemapEntry {
+  slug: string;
+  title: string;
+  title_te: string | null;
+  updated_at: string;
+  published_at: string;
+  category_slug: string;
+  language: 'te' | 'en';
+}
+
+/**
+ * Published stories for sitemap generation.
+ *
+ * Includes the headline because the Google News sitemap requires a
+ * `news:title`, and reconstructing one from the slug produces mangled text —
+ * especially for Telugu slugs, where hyphens are word separators inside a
+ * script that does not use them.
+ */
 export async function getAllPublishedSlugs(
   client: Client,
   { since, limit = 5000 }: { since?: Date; limit?: number } = {}
-): Promise<{ slug: string; updated_at: string; published_at: string; category_slug: string }[]> {
+): Promise<SitemapEntry[]> {
   let query = client
     .from('article_previews')
-    .select('slug, updated_at, published_at, category_slug')
+    .select('slug, title, title_te, updated_at, published_at, category_slug, language')
     .eq('noindex', false)
     .order('published_at', { ascending: false })
     .limit(limit);
@@ -428,5 +445,5 @@ export async function getAllPublishedSlugs(
 
   const { data, error } = await query;
   if (error) throw error;
-  return (data ?? []) as { slug: string; updated_at: string; published_at: string; category_slug: string }[];
+  return (data ?? []) as SitemapEntry[];
 }

@@ -21,8 +21,8 @@
   },
   "dependencies": {
     "@bcm10/validation": "*",
-    "@supabase/ssr": "^0.5.2",
-    "@supabase/supabase-js": "^2.47.10"
+    "@supabase/ssr": "^0.12.5",
+    "@supabase/supabase-js": "^2.112.4"
   },
   "devDependencies": {
     "@bcm10/config": "*",

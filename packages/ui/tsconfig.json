@@ -1,0 +1,5 @@
+{
+  "extends": "@bcm10/config/tsconfig/library.json",
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
+}

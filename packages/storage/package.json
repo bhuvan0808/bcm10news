@@ -17,7 +17,7 @@
     "@aws-sdk/client-s3": "^3.723.0",
     "@aws-sdk/s3-request-presigner": "^3.723.0",
     "@bcm10/validation": "*",
-    "@supabase/supabase-js": "^2.47.10"
+    "@supabase/supabase-js": "^2.112.4"
   },
   "devDependencies": {
     "@bcm10/config": "*",
