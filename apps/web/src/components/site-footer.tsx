@@ -45,7 +45,7 @@ export function SiteFooter({
             ) : null}
           </div>
 
-          <nav aria-label="Sections" className="md:col-span-4">
+          <nav aria-label="All sections" className="md:col-span-4">
             <h2 className="text-xs font-bold tracking-wider text-ink-faint uppercase">Sections</h2>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               {navigation.slice(0, 12).map((category) => (

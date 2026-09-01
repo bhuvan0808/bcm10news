@@ -40,13 +40,18 @@ test.describe('the newsroom is closed to the public', () => {
     await page.getByLabel(/^password$/i).fill('wrong-password-entirely');
     await page.getByRole('button', { name: /^sign in$/i }).click();
 
-    const alert = page.getByRole('alert');
-    await expect(alert).toBeVisible();
+    // Scoped to the form: Next.js injects its own role="alert" route announcer,
+    // so an unscoped query matches two elements.
+    const alert = page
+      .locator('form')
+      .getByRole('alert')
+      .or(page.getByText(/do not match/i));
+    await expect(alert.first()).toBeVisible();
 
     // The message must not distinguish "no such user" from "wrong password" —
     // that difference tells an attacker which addresses have accounts.
-    await expect(alert).toContainText(/do not match/i);
-    await expect(alert).not.toContainText(/not found|no user|does not exist/i);
+    await expect(alert.first()).toContainText(/do not match/i);
+    await expect(alert.first()).not.toContainText(/not found|no user|does not exist/i);
   });
 
   test('the newsroom is never indexable', async ({ request }) => {

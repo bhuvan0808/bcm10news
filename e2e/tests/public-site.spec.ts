@@ -17,8 +17,11 @@ test.describe('reading the site', () => {
     // The nav comes from the database, so its presence proves the whole read
     // path — Supabase, RLS, the cached query — is working, not just that Next
     // served a shell.
-    const nav = page.getByRole('navigation', { name: /sections/i });
-    await expect(nav.or(page.getByRole('button', { name: /open sections menu/i }))).toBeVisible();
+    // Scoped to the banner: the footer has its own section list, and two
+    // landmarks matching the same name is exactly what we fixed in the app.
+    const headerNav = page.getByRole('banner').getByRole('navigation', { name: /^sections$/i });
+    const drawerButton = page.getByRole('button', { name: /open sections menu/i });
+    await expect(headerNav.or(drawerButton).first()).toBeVisible();
 
     await expect(page.locator('footer')).toContainText('BCM10');
   });
