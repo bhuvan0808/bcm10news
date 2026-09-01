@@ -48,9 +48,15 @@ async function ambiguousPairs() {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
+      // Grouped by the UNORDERED pair. PostgREST cannot disambiguate two
+      // relationships between the same two tables even when they point in
+      // opposite directions — articles.featured_video_id -> article_videos and
+      // article_videos.article_id -> articles is one FK each, and together they
+      // still produce PGRST201. Grouping by direction misses exactly that case,
+      // which is how the story edit page shipped broken.
       query: `
-        select confrelid::regclass::text as target,
-               conrelid::regclass::text  as source,
+        select least(conrelid::regclass::text, confrelid::regclass::text) as a,
+               greatest(conrelid::regclass::text, confrelid::regclass::text) as b,
                string_agg(conname, ', ' order by conname) as constraints
         from pg_constraint
         where contype = 'f' and connamespace = 'public'::regnamespace
@@ -64,11 +70,12 @@ async function ambiguousPairs() {
 
   const pairs = new Map();
   for (const row of await response.json()) {
-    const source = row.source.replace(/^public\./, '');
-    const target = row.target.replace(/^public\./, '');
-    // Ambiguous whichever way round the embed is written.
-    pairs.set(`${source}>${target}`, row.constraints);
-    pairs.set(`${target}>${source}`, row.constraints);
+    const a = row.a.replace(/^public\./, '');
+    const b = row.b.replace(/^public\./, '');
+    // Recorded both ways round, because the embed can be written from either
+    // side and is ambiguous from both.
+    pairs.set(`${a}>${b}`, row.constraints);
+    pairs.set(`${b}>${a}`, row.constraints);
   }
   return pairs;
 }

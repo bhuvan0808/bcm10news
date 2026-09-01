@@ -143,7 +143,7 @@ export async function getNewsroomArticle(client: Client, id: string) {
        category:categories!articles_category_id_fkey(id, slug, name, name_te),
        location:locations!articles_location_id_fkey(id, slug, name, name_te),
        featured_image:media!articles_featured_image_id_fkey(*),
-       videos:article_videos(*),
+       videos:article_videos!article_videos_article_id_fkey(*),
        gallery:article_media(id, role, position, caption, media(*)),
        article_tags(tag:tags(id, slug, name, name_te)),
        article_coauthors(profile_id),
