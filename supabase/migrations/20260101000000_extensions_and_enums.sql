@@ -160,11 +160,17 @@ as $$
   select trim(
     both '-' from
     regexp_replace(
-      regexp_replace(lower(input), '[^\wఀ-౿]+', '-', 'g'),
+      regexp_replace(
+        -- ZWNJ/ZWJ (U+200C, U+200D) shape Telugu ligatures and sit *inside*
+        -- words. They are stripped, not hyphenated: they are invisible, so two
+        -- slugs differing only by a joiner would look identical to a reader.
+        regexp_replace(lower(input), '[‌‍]', '', 'g'),
+        '[^a-z0-9ఀ-౿]+', '-', 'g'
+      ),
       '-{2,}', '-', 'g'
     )
   );
 $$;
 
 comment on function public.slugify is
-  'Lowercases and hyphenates a string. Preserves the Telugu Unicode block (U+0C00–U+0C7F).';
+  'Lowercases and hyphenates. Preserves the Telugu block (U+0C00-U+0C7F), strips zero-width joiners. Mirrors slugify() in @bcm10/validation.';
