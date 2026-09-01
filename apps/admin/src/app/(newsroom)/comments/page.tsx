@@ -25,7 +25,7 @@ export default async function CommentsPage({
   let query = supabase
     .from('comments')
     .select(
-      'id, body, created_at, is_approved, is_flagged, flagged_reason, article_id, profiles(email, display_name, full_name), articles(title, slug)'
+      'id, body, created_at, is_approved, is_flagged, flagged_reason, article_id, profiles!comments_profile_id_fkey(email, display_name, full_name), articles(title, slug)'
     )
     .order('created_at', { ascending: view === 'pending' })
     .limit(100);

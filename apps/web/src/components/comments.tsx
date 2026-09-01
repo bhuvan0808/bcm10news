@@ -37,7 +37,7 @@ export async function Comments({
   const { data: rows } = await supabase
     .from('comments')
     .select(
-      'id, body, created_at, parent_id, is_approved, profile_id, profiles(display_name, full_name)'
+      'id, body, created_at, parent_id, is_approved, profile_id, profiles!comments_profile_id_fkey(display_name, full_name)'
     )
     .eq('article_id', articleId)
     .order('created_at', { ascending: true })

@@ -35,7 +35,9 @@
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
     "prepare": "husky || true",
-    "clean:cache": "rimraf \"**/*.tsbuildinfo\" \"**/.next/types\""
+    "clean:cache": "rimraf \"**/*.tsbuildinfo\" \"**/.next/types\"",
+    "db:check-embeds": "node scripts/check-embeds.mjs",
+    "db:verify": "node scripts/verify-database.mjs && node scripts/check-embeds.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",

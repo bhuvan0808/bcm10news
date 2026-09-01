@@ -12,7 +12,11 @@ import type { Paginated } from './types';
 
 type Client = SupabaseClient<Database>;
 
-/** Columns the newsroom list view needs. Bodies are never fetched for a list. */
+/**
+ * Columns the newsroom list view needs. Bodies are never fetched for a list.
+ *
+ * @embedBase articles
+ */
 const NEWSROOM_LIST_SELECT = `
   id, slug, title, title_te, status, is_breaking, is_premium, is_featured,
   published_at, scheduled_for, created_at, updated_at,
@@ -143,7 +147,7 @@ export async function getNewsroomArticle(client: Client, id: string) {
        gallery:article_media(id, role, position, caption, media(*)),
        article_tags(tag:tags(id, slug, name, name_te)),
        article_coauthors(profile_id),
-       article_related(related_article_id, position)`
+       article_related!article_related_article_id_fkey(related_article_id, position)`
     )
     .eq('id', id)
     .maybeSingle();

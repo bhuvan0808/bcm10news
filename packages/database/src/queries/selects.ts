@@ -58,7 +58,11 @@ export const ARTICLE_DETAIL_SELECT = `
   article_tags(tag:tags(${TAG_FIELDS}))
 `;
 
-/** Everything the card components render. */
+/**
+ * Everything the card components render.
+ *
+ * @embedBase article_previews
+ */
 export const PREVIEW_SELECT = `
   id, slug, title, title_te, subtitle, excerpt, language, published_at, updated_at,
   author_id, author_slug, author_name, author_name_te, byline_override,
