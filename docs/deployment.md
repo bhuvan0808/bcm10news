@@ -64,8 +64,8 @@ https://admin.bcm10news.in/auth/callback
 
 ### Make yourself super admin
 
-The auth trigger creates every new user as a `reader`. Promote the first account by hand, in the
-SQL editor, after signing in once:
+The auth trigger creates every new user as a `reader`. Promote the first account
+from the Supabase **SQL editor** after signing in once:
 
 ```sql
 update public.profiles
@@ -73,11 +73,21 @@ update public.profiles
        can_publish = true,
        can_send_push = true,
        can_manage_media_library = true,
-       slug = 'bhuvan-boddu'
+       slug = 'your-name'
  where email = 'you@example.com';
 ```
 
-Every other role is then assignable from the newsroom.
+This works because `guard_profile_privileges()` passes for a caller with no
+session — the SQL editor, the service role, or psql. A _signed-in_ user cannot
+change their own privileges, which is the case the guard exists for.
+
+> The first version of that guard required an existing super_admin, which made
+> the first one impossible to create. Fixed in migration
+> `20260101001400_fix_privilege_guard_bootstrap.sql`; both halves of the
+> behaviour are covered by `scripts/verify-database.mjs`.
+
+Every other role is then assignable from the newsroom, and each change is
+written to `audit_logs`.
 
 ---
 

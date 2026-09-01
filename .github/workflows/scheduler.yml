@@ -1,0 +1,75 @@
+name: Scheduler
+
+# Interim scheduler for publish-scheduled and refresh-trending.
+#
+# Vercel's Hobby plan caps cron at once per day, which cannot drive scheduled
+# publishing. This workflow fills the gap using credentials the repository
+# already has.
+#
+# Be clear about its limits: GitHub's minimum interval is five minutes, and
+# scheduled workflows on shared runners are regularly delayed — ten to twenty
+# minutes at busy times, and occasionally skipped entirely. A story queued for
+# 09:00 will usually publish within a few minutes of it, but that is not a
+# guarantee.
+#
+# For a newsroom that cares about exact publish times, replace this with either
+# option in apps/web/CRON.md: the Cloudflare Worker in infrastructure/cron-worker
+# (free, per-minute, needs a token with Workers:Edit) or Vercel Pro. Both
+# endpoints are idempotent, so running this alongside either is harmless.
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: scheduler
+  cancel-in-progress: false
+
+jobs:
+  tick:
+    name: Publish due stories and refresh trending
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Publish scheduled stories
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          response=$(curl -sS -w '\n%{http_code}' \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$SITE_URL/api/cron/publish-scheduled")
+
+          body=$(echo "$response" | head -n -1)
+          code=$(echo "$response" | tail -n 1)
+
+          echo "HTTP $code"
+          echo "$body"
+
+          # A failure here means stories are not going out. Fail loudly so the
+          # workflow's own failure notifications surface it.
+          if [ "$code" != "200" ]; then
+            echo "::error::publish-scheduled returned $code"
+            exit 1
+          fi
+
+      - name: Refresh trending
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          response=$(curl -sS -w '\n%{http_code}' \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$SITE_URL/api/cron/refresh-trending")
+
+          code=$(echo "$response" | tail -n 1)
+          echo "HTTP $code"
+          echo "$response" | head -n -1
+
+          # Stale "most read" is a cosmetic problem, so warn rather than fail —
+          # failing would mask a genuine publishing outage in the step above.
+          if [ "$code" != "200" ]; then
+            echo "::warning::refresh-trending returned $code"
+          fi

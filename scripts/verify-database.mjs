@@ -156,6 +156,54 @@ async function main() {
 
   await sql(`delete from public.categories where slug in ('verify-l1','verify-l2','verify-l3');`);
 
+  console.log('\nPrivilege escalation\n');
+
+  /*
+   * The guard has to hold two opposing things at once:
+   *
+   *   - a signed-in reader must not be able to promote themself through the
+   *     "update own" policy, which RLS cannot restrict at column level
+   *   - a sessionless operator (service role, SQL editor, psql) must be able
+   *     to, or the first super_admin could never be created
+   *
+   * The bootstrap half was broken on first deploy: promoting anyone failed
+   * because there was no admin yet. This checks both halves so it cannot
+   * regress.
+   */
+  const [{ id: probeId }] = await sql(`
+    insert into auth.users (id, email, raw_user_meta_data)
+    values (gen_random_uuid(), 'rls-escalation-probe@example.invalid', '{}'::jsonb)
+    returning id;
+  `);
+
+  try {
+    await expectFailure(
+      'a signed-in reader cannot promote themself',
+      `do $$
+       begin
+         perform set_config('request.jwt.claims',
+           json_build_object('sub', '${probeId}', 'role', 'authenticated')::text, true);
+         perform set_config('role', 'authenticated', true);
+         update public.profiles set role = 'super_admin' where id = '${probeId}';
+       end $$;`,
+      'may only be changed by a super_admin'
+    );
+
+    const [after] = await sql(`select role from public.profiles where id = '${probeId}';`);
+    check('their role is unchanged', after?.role === 'reader', after?.role);
+
+    // The operator path must still work, or the newsroom cannot be opened.
+    await sql(`update public.profiles set role = 'editor' where id = '${probeId}';`);
+    const [promoted] = await sql(`select role from public.profiles where id = '${probeId}';`);
+    check(
+      'a sessionless operator can still set a role',
+      promoted?.role === 'editor',
+      promoted?.role
+    );
+  } finally {
+    await sql(`delete from auth.users where id = '${probeId}';`);
+  }
+
   console.log('\nDerived content\n');
 
   const [derived] = await sql(`
