@@ -1,0 +1,14 @@
+name = "bcm10-cron"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+# Vercel Hobby caps cron at once per day, which is useless for scheduled
+# publishing. Cloudflare's free tier allows per-minute triggers, so the real
+# schedule lives here and the Vercel crons are only a backstop.
+[triggers]
+crons = ["* * * * *"]
+
+[vars]
+SITE_URL = "https://bcm10news.vercel.app"
+
+# CRON_SECRET is set with `wrangler secret put CRON_SECRET`, never here.
