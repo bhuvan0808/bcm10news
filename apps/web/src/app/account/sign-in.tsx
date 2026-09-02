@@ -124,6 +124,24 @@ export function ReaderSignIn({ returnTo, className }: { returnTo: string; classN
         </a>
         .
       </p>
+
+      {/*
+        Readers sign in with Google or a link; only newsroom staff get
+        passwords. A reporter who lands here sees no password field and
+        reasonably concludes the site is broken, so point them at the right
+        door. The newsroom URL is not a secret — it is noindexed and every
+        route behind it requires authentication.
+      */}
+      <p className="border-t border-rule pt-3 text-xs text-ink-faint">
+        Newsroom staff sign in at{' '}
+        <a
+          href={`${process.env['NEXT_PUBLIC_ADMIN_URL'] ?? ''}/sign-in`}
+          className="font-medium text-brand underline"
+        >
+          the newsroom
+        </a>
+        , with the email and password an editor gave you.
+      </p>
     </div>
   );
 }
