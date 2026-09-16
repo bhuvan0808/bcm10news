@@ -305,14 +305,14 @@
     left: -9999px;
     top: 0;
     z-index: 100;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
 
   .skip-link:focus {
     left: 0.5rem;
     top: 0.5rem;
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
     padding: 0.5rem 1rem;
     /* Solid red, not `brand`: white sits on top of it. */
     background: var(--color-brand-solid);

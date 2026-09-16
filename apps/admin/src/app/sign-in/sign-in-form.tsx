@@ -165,7 +165,7 @@ export function SignInForm({ next }: { next: string }) {
               setStatus('idle');
               setMessage(null);
             }}
-            className="w-full text-center text-sm text-ink-muted hover:text-brand"
+            className="inline-flex min-h-11 w-full items-center justify-center text-center text-sm text-ink-muted hover:text-brand"
           >
             Forgotten your password? Email me a link instead
           </button>
@@ -200,7 +200,7 @@ export function SignInForm({ next }: { next: string }) {
               setStatus('idle');
               setMessage(null);
             }}
-            className="w-full text-center text-sm text-ink-muted hover:text-brand"
+            className="inline-flex min-h-11 w-full items-center justify-center text-center text-sm text-ink-muted hover:text-brand"
           >
             Use a password instead
           </button>

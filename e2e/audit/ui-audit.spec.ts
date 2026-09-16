@@ -173,7 +173,23 @@ async function measure(page: Page, name: string, width: string) {
 }
 
 async function auditPage(page: Page, name: string, url: string, width: string) {
-  await page.goto(url, { waitUntil: 'networkidle' }).catch(() => page.goto(url));
+  const response = await page.goto(url, { waitUntil: 'networkidle' }).catch(() => page.goto(url));
+
+  // A 500 renders the error boundary, which has no <title>, one h1 and none of
+  // the real page's markup — so axe dutifully reports findings about a page
+  // nobody will ever see. That happened here and cost real time. Say plainly
+  // that the page is broken, and do not dress the consequences up as UI
+  // defects. /not-found is expected to be a 404 and is the one exception.
+  const status = response?.status() ?? 0;
+  const expected = name === 'not-found' ? 404 : 200;
+  if (status !== expected) {
+    findings.push({
+      page: name,
+      width,
+      kind: 'page-did-not-render',
+      detail: `HTTP ${status} (expected ${expected}) — findings below are from the error page, not the real one`,
+    });
+  }
 
   await page.screenshot({
     path: join(OUT, `${name}-${width}.png`),
