@@ -236,6 +236,11 @@ Dense Indian-newsroom layout, strong typography, Telugu-first type pairing,
 mobile-first, prominent breaking news, accessible contrast, keyboard navigation,
 screen-reader labels. ✅
 
+Audited in a real browser at three viewports with axe-core — 66 findings, now 5. Two systemic bugs accounted for nearly all of them: Tailwind was never
+scanning `packages/ui`, so every shared `Button` and `Input` had been
+rendering without its height, and eleven palette tokens had never been
+measured against WCAG AA. See `ui-audit.md`. ✅
+
 ## 36. Module boundaries
 
 `ArticleService` (queries), `MediaService`, `EmailService`, `PaymentService`,
