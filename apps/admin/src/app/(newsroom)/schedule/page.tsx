@@ -66,7 +66,7 @@ export default async function SchedulePage() {
                   <div className="flex flex-wrap items-center gap-2">
                     <StatusBadge status={article.status} />
                     {schedule?.overdue ? (
-                      <span className="rounded-xs bg-brand px-1.5 py-0.5 text-[10px] font-bold text-white uppercase">
+                      <span className="rounded-xs bg-brand-solid px-1.5 py-0.5 text-[10px] font-bold text-white uppercase">
                         Overdue
                       </span>
                     ) : null}

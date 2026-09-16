@@ -68,7 +68,7 @@ export function Paywall({
         <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
             href={`/subscribe?from=${encodeURIComponent(returnTo)}`}
-            className="w-full rounded-sm bg-brand px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-dark sm:w-auto"
+            className="w-full rounded-sm bg-brand-solid px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-solid-hover sm:w-auto"
           >
             See subscription plans
           </Link>

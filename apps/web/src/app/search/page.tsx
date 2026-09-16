@@ -133,7 +133,7 @@ function SearchShell({ query, children }: { query: string; children: React.React
         />
         <button
           type="submit"
-          className="rounded-sm bg-brand px-5 text-sm font-semibold text-white hover:bg-brand-dark"
+          className="rounded-sm bg-brand-solid px-5 text-sm font-semibold text-white hover:bg-brand-solid-hover"
         >
           Search
         </button>

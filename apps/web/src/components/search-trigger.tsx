@@ -53,7 +53,7 @@ export function SearchTrigger() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-sm p-2 text-ink hover:bg-paper-sunk"
+        className="inline-flex size-11 items-center justify-center rounded-sm text-ink hover:bg-paper-sunk"
         aria-label="Search"
       >
         <SearchIcon />
@@ -78,7 +78,7 @@ export function SearchTrigger() {
       />
       <button
         type="submit"
-        className="rounded-sm p-2 text-ink hover:bg-paper-sunk"
+        className="inline-flex size-11 items-center justify-center rounded-sm text-ink hover:bg-paper-sunk"
         aria-label="Search"
       >
         <SearchIcon />

@@ -55,7 +55,7 @@ export function MobileNav({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="-ml-1 rounded-sm p-2 text-ink hover:bg-paper-sunk md:hidden"
+        className="-ml-1 inline-flex size-11 items-center justify-center rounded-sm text-ink hover:bg-paper-sunk md:hidden"
         aria-label="Open sections menu"
         aria-expanded={open}
       >
@@ -90,7 +90,7 @@ export function MobileNav({
                 ref={closeButtonRef}
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-sm p-2 text-ink hover:bg-paper-sunk"
+                className="inline-flex size-11 items-center justify-center rounded-sm text-ink hover:bg-paper-sunk"
                 aria-label="Close menu"
               >
                 <svg
@@ -138,7 +138,7 @@ export function MobileNav({
             <div className="border-t border-rule p-4">
               <Link
                 href="/subscribe"
-                className="block rounded-sm bg-brand px-4 py-2.5 text-center text-sm font-semibold text-white"
+                className="block rounded-sm bg-brand-solid px-4 py-2.5 text-center text-sm font-semibold text-white"
               >
                 Subscribe
               </Link>

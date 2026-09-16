@@ -271,7 +271,7 @@ function PersonRow({
 
 function RoleBadge({ role }: { role: UserRole }) {
   const tone: Partial<Record<UserRole, string>> = {
-    super_admin: 'bg-brand text-white',
+    super_admin: 'bg-brand-solid text-white',
     managing_editor: 'bg-status-review/15 text-status-review',
     editor: 'bg-status-submitted/15 text-status-submitted',
     reporter: 'bg-paper-sunk text-ink-muted',

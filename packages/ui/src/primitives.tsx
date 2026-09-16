@@ -11,17 +11,21 @@ import { cn } from './cn';
  */
 
 const BUTTON_VARIANTS = {
-  primary: 'bg-brand text-white hover:bg-brand-dark',
+  // `brand-solid`, not `brand`: in dark mode `brand` lightens so it stays
+  // legible as text, which drops white-on-red to 3.65:1. See globals.css.
+  primary: 'bg-brand-solid text-white hover:bg-brand-solid-hover',
   secondary: 'bg-paper-sunk text-ink hover:bg-rule',
   outline: 'border border-rule-strong text-ink hover:bg-paper-sunk',
   ghost: 'text-ink hover:bg-paper-sunk',
   danger: 'bg-red-600 text-white hover:bg-red-700',
 } as const;
 
+// Heights are min-heights so a button that wraps to two lines on a narrow
+// phone grows instead of clipping its own label.
 const BUTTON_SIZES = {
-  sm: 'h-8 px-3 text-sm',
-  md: 'h-10 px-4 text-sm',
-  lg: 'h-12 px-6 text-base',
+  sm: 'min-h-8 px-3 py-1.5 text-sm',
+  md: 'min-h-10 px-4 py-2 text-sm',
+  lg: 'min-h-12 px-6 py-2.5 text-base',
 } as const;
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -88,7 +92,10 @@ export function Input({ invalid, className, ...props }: InputProps) {
     <input
       aria-invalid={invalid || undefined}
       className={cn(
-        'h-10 w-full rounded-sm border bg-paper-raised px-3 text-sm text-ink',
+        // 16px on mobile, not 14px: iOS Safari zooms the whole page when a
+        // field smaller than 16px takes focus, and the reporter filing from a
+        // phone then has to pinch back out.
+        'h-11 w-full rounded-sm border bg-paper-raised px-3 text-base text-ink sm:h-10 sm:text-sm',
         'placeholder:text-ink-faint',
         'disabled:cursor-not-allowed disabled:opacity-60',
         invalid ? 'border-red-500' : 'border-rule-strong',
@@ -110,7 +117,7 @@ export function Badge({
 }) {
   const tones = {
     neutral: 'bg-paper-sunk text-ink-muted',
-    brand: 'bg-brand text-white',
+    brand: 'bg-brand-solid text-white',
     premium: 'bg-premium-bg text-premium',
     live: 'bg-green-600 text-white',
     muted: 'bg-transparent text-ink-faint border border-rule',

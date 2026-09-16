@@ -27,7 +27,7 @@ export default function NoAccessPage() {
           <form action="/auth/sign-out" method="post">
             <button
               type="submit"
-              className="rounded-sm bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-dark"
+              className="rounded-sm bg-brand-solid px-4 py-2 text-sm font-semibold text-white hover:bg-brand-solid-hover"
             >
               Sign out
             </button>

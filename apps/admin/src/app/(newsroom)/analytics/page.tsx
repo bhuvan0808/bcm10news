@@ -66,7 +66,7 @@ export default async function AnalyticsPage({
               href={`/analytics?days=${window}`}
               aria-current={window === days ? 'page' : undefined}
               className={`px-3 py-1.5 text-sm font-medium first:rounded-l-sm last:rounded-r-sm ${
-                window === days ? 'bg-brand text-white' : 'text-ink-muted hover:bg-paper-sunk'
+                window === days ? 'bg-brand-solid text-white' : 'text-ink-muted hover:bg-paper-sunk'
               }`}
             >
               {window}d

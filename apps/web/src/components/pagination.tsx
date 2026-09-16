@@ -67,7 +67,7 @@ export function Pagination({
 function linkClass(active = false) {
   return cn(
     'inline-flex h-9 min-w-9 items-center justify-center rounded-sm px-3 text-sm font-semibold',
-    active ? 'bg-brand text-white' : 'border border-rule text-ink hover:bg-paper-sunk'
+    active ? 'bg-brand-solid text-white' : 'border border-rule text-ink hover:bg-paper-sunk'
   );
 }
 

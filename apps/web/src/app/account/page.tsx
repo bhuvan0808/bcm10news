@@ -133,7 +133,7 @@ export default async function AccountPage({
             </p>
             <Link
               href="/subscribe"
-              className="mt-3 inline-block rounded-sm bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-dark"
+              className="mt-3 inline-block rounded-sm bg-brand-solid px-4 py-2 text-sm font-semibold text-white hover:bg-brand-solid-hover"
             >
               See plans
             </Link>

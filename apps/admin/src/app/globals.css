@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+/* See the note in the public site's globals.css: Tailwind does not scan
+   node_modules, and workspace packages are linked there, so classes used only
+   inside @bcm10/ui never reach the stylesheet unless named here. */
+@source '../../../../packages/ui/src/**/*.{ts,tsx}';
+
 /*
  * Newsroom CMS design tokens.
  *
@@ -25,7 +30,7 @@
 
   --color-ink: #18181b;
   --color-ink-muted: #52525b;
-  --color-ink-faint: #8b8b96;
+  --color-ink-faint: #6b6b74; /* 4.93:1 — was #8b8b96 at 3.15:1 */
 
   --color-rule: #e2e2e7;
   --color-rule-strong: #c8c8d0;
@@ -33,19 +38,26 @@
   --color-brand: #c1272d;
   --color-brand-dark: #961c21;
   --color-brand-light: #fdeced;
+  --color-brand-solid: #c1272d; /* white on it: 5.84:1 */
+  --color-brand-solid-hover: #961c21;
 
   /* Workflow states. These colours are load-bearing: a reporter scanning a
-     queue reads the dot before the word. */
-  --color-status-draft: #71717a;
-  --color-status-submitted: #2563eb;
-  --color-status-review: #7c3aed;
-  --color-status-changes: #ea580c;
-  --color-status-approved: #059669;
-  --color-status-scheduled: #0891b2;
-  --color-status-published: #16a34a;
-  --color-status-archived: #a1a1aa;
+     queue reads the dot before the word — which is exactly why they have to
+     clear 4.5:1. The original set was picked for hue and several did not:
+     `published` sat at 2.85:1 and `archived` at 2.21:1, illegible on the very
+     screen a reporter uses at the end of a shift. Each is now the darkest
+     point on its own hue that passes, so the palette still reads as the same
+     eight colours. */
+  --color-status-draft: #6b6b74; /* 4.93:1 */
+  --color-status-submitted: #2562e9; /* 4.90:1 */
+  --color-status-review: #7c3aed; /* 5.32:1 */
+  --color-status-changes: #bb460a; /* 4.91:1 */
+  --color-status-approved: #047c57; /* 4.87:1 */
+  --color-status-scheduled: #077691; /* 4.89:1 */
+  --color-status-published: #117d39; /* 4.88:1 */
+  --color-status-archived: #6c6c72; /* 4.87:1 */
 
-  --color-premium: #a16207;
+  --color-premium: #a16207; /* 4.60:1 */
   --color-premium-bg: #fef6e0;
 
   --container-page: 90rem;
@@ -59,7 +71,7 @@
 
     --color-ink: #f4f4f5;
     --color-ink-muted: #a1a1aa;
-    --color-ink-faint: #71717a;
+    --color-ink-faint: #83838b; /* 4.93:1 — was #71717a at 3.84:1 */
 
     --color-rule: #2a2a30;
     --color-rule-strong: #3f3f46;
@@ -67,6 +79,20 @@
     --color-brand: #e8524f;
     --color-brand-dark: #c1272d;
     --color-brand-light: #2a1516;
+    --color-brand-solid: #c1272d; /* white on it: 5.84:1 */
+    --color-brand-solid-hover: #cf3138;
+
+    /* The darkened light-mode statuses are unreadable on a near-black page, so
+       the four that were already dark enough to fail here are lightened
+       instead. The other four pass in both modes and are left alone. */
+    --color-status-draft: #83838b; /* 4.93:1 */
+    --color-status-submitted: #4c7fef; /* 4.94:1 */
+    --color-status-review: #9a67f1; /* 4.93:1 */
+    --color-status-changes: #ea580c; /* 5.21:1 */
+    --color-status-approved: #059669; /* 4.92:1 */
+    --color-status-scheduled: #0891b2; /* 5.04:1 */
+    --color-status-published: #16a34a; /* 5.63:1 */
+    --color-status-archived: #a1a1aa; /* 7.24:1 */
 
     --color-premium: #d4a017;
     --color-premium-bg: #2a2110;

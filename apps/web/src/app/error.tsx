@@ -34,7 +34,7 @@ export default function RouteError({
       <button
         type="button"
         onClick={reset}
-        className="mt-6 rounded-sm bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark"
+        className="mt-6 rounded-sm bg-brand-solid px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-solid-hover"
       >
         Try again
       </button>

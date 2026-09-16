@@ -67,7 +67,7 @@ export function MediaGrid({
 
                     {missingAlt ? (
                       <span
-                        className="absolute top-1 left-1 rounded-xs bg-brand px-1 py-0.5 text-[10px] font-bold text-white uppercase"
+                        className="absolute top-1 left-1 rounded-xs bg-brand-solid px-1 py-0.5 text-[10px] font-bold text-white uppercase"
                         title="This image has no alt text"
                       >
                         No alt

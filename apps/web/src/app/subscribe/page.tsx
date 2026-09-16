@@ -151,7 +151,7 @@ function PlanCard({
       }`}
     >
       {highlighted ? (
-        <span className="mb-2 self-start rounded-xs bg-brand px-2 py-0.5 text-[10px] font-bold tracking-wider text-white uppercase">
+        <span className="mb-2 self-start rounded-xs bg-brand-solid px-2 py-0.5 text-[10px] font-bold tracking-wider text-white uppercase">
           Most popular
         </span>
       ) : null}
@@ -190,7 +190,7 @@ function PlanCard({
             href={`/subscribe/checkout?plan=${plan.code}`}
             className={`block rounded-sm px-4 py-2.5 text-center text-sm font-semibold ${
               highlighted
-                ? 'bg-brand text-white hover:bg-brand-dark'
+                ? 'bg-brand-solid text-white hover:bg-brand-solid-hover'
                 : 'border border-rule-strong text-ink hover:bg-paper-sunk'
             }`}
           >

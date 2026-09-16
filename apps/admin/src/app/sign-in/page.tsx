@@ -24,10 +24,13 @@ export default async function SignInPage({
     <div className="flex min-h-screen items-center justify-center bg-paper p-6">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="flex items-baseline justify-center gap-1.5">
+          {/* The wordmark is the page's heading, not decoration: this was the
+              only page in either app with no h1, so a screen-reader user
+              landing here had nothing to orient on. */}
+          <h1 className="flex items-baseline justify-center gap-1.5">
             <span className="text-3xl font-black tracking-tight text-brand">BCM10</span>
             <span className="text-xl font-semibold tracking-tight text-ink">Newsroom</span>
-          </div>
+          </h1>
           <p className="mt-2 text-sm text-ink-muted">Sign in to file and edit stories.</p>
         </div>
 

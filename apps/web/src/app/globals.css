@@ -1,6 +1,17 @@
 @import 'tailwindcss';
 
 /*
+ * Shared primitives live in a workspace package, which npm links into
+ * node_modules — and Tailwind's automatic source detection skips node_modules
+ * entirely. Without this line every class that appears *only* in @bcm10/ui is
+ * silently dropped from the build: `h-8`, `h-10` and `h-12` were missing, so
+ * every Button and Input collapsed to its line-box height (a 48px primary
+ * button rendered 24px tall) and every touch target failed. Nothing errors —
+ * the class simply does not exist — so this is invisible until measured.
+ */
+@source '../../../../packages/ui/src/**/*.{ts,tsx}';
+
+/*
  * BCM10 News design tokens.
  *
  * The reference point is a printed Telugu daily, not a SaaS dashboard: dense,
@@ -34,23 +45,33 @@
   --color-paper-raised: #ffffff;
   --color-paper-sunk: #f4f2ee;
 
-  --color-ink: #141210;
-  --color-ink-muted: #55504a;
-  --color-ink-faint: #8a837b;
+  /* Contrast ratios against --color-paper are noted per token. Every value
+     here clears WCAG AA (4.5:1) on paper, paper-sunk and paper-raised — these
+     are measured, not estimated, so please re-measure before adjusting one. */
+  --color-ink: #141210; /* 17.4:1 */
+  --color-ink-muted: #55504a; /* 7.71:1 */
+  --color-ink-faint: #746e67; /* 4.87:1 — was #8a837b at 3.62:1, which failed */
 
   --color-rule: #e2ded7;
   --color-rule-strong: #c9c3b9;
 
   /* --- Masthead red ----------------------------------------------------- */
+  /* `brand` is the red used as *ink* — links, kickers, the masthead rule.
+     `brand-solid` is the red used as a *background* behind white text. They
+     are the same colour in light mode and deliberately diverge in dark mode,
+     where the red has to lighten to stay legible as text but must not, or
+     white on top of it drops to 3.65:1. One token cannot do both jobs. */
   --color-brand: #c1272d;
   --color-brand-dark: #961c21;
   --color-brand-light: #f6e7e7;
+  --color-brand-solid: #c1272d; /* white on it: 5.84:1 */
+  --color-brand-solid-hover: #961c21; /* white on it: 8.45:1 */
 
   /* --- Semantic --------------------------------------------------------- */
   --color-breaking: #c1272d;
-  --color-premium: #a16207;
+  --color-premium: #a16207; /* 4.60:1 */
   --color-premium-bg: #fef6e0;
-  --color-live: #16a34a;
+  --color-live: #11803a; /* 4.53:1 — was #16a34a at 3.19:1 */
 
   /* --- Rhythm ----------------------------------------------------------- */
   --spacing-gutter: 1.25rem;
@@ -74,18 +95,27 @@
     --color-paper-sunk: #0d0c0b;
 
     --color-ink: #f0ede8;
-    --color-ink-muted: #a8a29a;
-    --color-ink-faint: #78716a;
+    --color-ink-muted: #a8a29a; /* 7.40:1 */
+    --color-ink-faint: #87817a; /* 4.86:1 — was #78716a at 3.89:1 */
 
     --color-rule: #2d2a27;
     --color-rule-strong: #423e39;
 
+    /* Lightened so it reads as text on a dark page (5.12:1)… */
     --color-brand: #e8524f;
     --color-brand-dark: #c1272d;
     --color-brand-light: #2a1615;
+    /* …but held back where white sits on top of it: white on #e8524f is only
+       3.65:1, so the solid red stays as it is in print. */
+    --color-brand-solid: #c1272d; /* white on it: 5.84:1 */
+    --color-brand-solid-hover: #cf3138; /* white on it: 5.06:1 — lighter on
+                                           hover, since darker is invisible
+                                           against a near-black page */
 
-    --color-premium: #d4a017;
+    --color-premium: #d4a017; /* 7.88:1 */
     --color-premium-bg: #2a2110;
+    --color-live: #16a34a; /* 5.88:1 — the light-mode darkening is unnecessary
+                              and would be unreadable here */
   }
 }
 
@@ -280,10 +310,15 @@
   .skip-link:focus {
     left: 0.5rem;
     top: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     padding: 0.5rem 1rem;
-    background: var(--color-brand);
+    /* Solid red, not `brand`: white sits on top of it. */
+    background: var(--color-brand-solid);
     color: #fff;
     font-weight: 600;
+    border-radius: 2px;
   }
 }
 

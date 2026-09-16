@@ -71,7 +71,7 @@ export default async function ArticlesPage({
 
         <Link
           href="/articles/new"
-          className="rounded-sm bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-dark"
+          className="rounded-sm bg-brand-solid px-4 py-2 text-sm font-semibold text-white hover:bg-brand-solid-hover"
         >
           Start a story
         </Link>
@@ -140,7 +140,7 @@ export default async function ArticlesPage({
                   <div className="flex flex-wrap items-center gap-2">
                     <StatusBadge status={article.status} />
                     {article.is_breaking ? (
-                      <span className="rounded-xs bg-brand px-1.5 py-0.5 text-[10px] font-bold text-white uppercase">
+                      <span className="rounded-xs bg-brand-solid px-1.5 py-0.5 text-[10px] font-bold text-white uppercase">
                         Breaking
                       </span>
                     ) : null}

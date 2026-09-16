@@ -253,7 +253,7 @@ function LicenseRow({
               </span>
             ) : null}
             {expired ? (
-              <span className="ml-2 rounded-xs bg-brand px-1.5 py-0.5 text-[10px] font-bold text-white uppercase">
+              <span className="ml-2 rounded-xs bg-brand-solid px-1.5 py-0.5 text-[10px] font-bold text-white uppercase">
                 Expired
               </span>
             ) : null}
@@ -596,7 +596,7 @@ function LicenseDialog({
                     className={cn(
                       'rounded-sm px-2 py-1 text-xs font-medium',
                       selected
-                        ? 'bg-brand text-white'
+                        ? 'bg-brand-solid text-white'
                         : 'bg-paper-sunk text-ink-muted hover:bg-rule'
                     )}
                   >

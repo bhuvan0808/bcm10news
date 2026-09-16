@@ -27,19 +27,26 @@ export function SiteHeader({
     <header className="sticky top-0 z-40 border-b-[3px] border-brand bg-paper/95 backdrop-blur-sm">
       {/* Utility strip: dateline and account, de-emphasised. */}
       <div className="hidden border-b border-rule md:block">
-        <div className="mx-auto flex max-w-(--container-page) items-center justify-between px-4 py-1.5 text-xs text-ink-faint">
-          <span>{dateLabel}</span>
+        {/* The links carry the strip's vertical padding rather than the strip
+            carrying it: as bare inline text they were 21px tall, under the
+            24px minimum, and a thin strip is exactly where a mis-tap costs a
+            reader the page they were reading. */}
+        <div className="mx-auto flex max-w-(--container-page) items-center justify-between px-4 text-xs text-ink-faint">
+          <span className="py-2">{dateLabel}</span>
           <nav aria-label="Utility" className="flex items-center gap-4">
-            <Link href="/videos" className="hover:text-brand">
+            <Link href="/videos" className="inline-flex items-center py-2 hover:text-brand">
               Videos
             </Link>
-            <Link href="/photos" className="hover:text-brand">
+            <Link href="/photos" className="inline-flex items-center py-2 hover:text-brand">
               Photos
             </Link>
-            <Link href="/subscribe" className="font-semibold text-brand hover:underline">
+            <Link
+              href="/subscribe"
+              className="inline-flex items-center py-2 font-semibold text-brand hover:underline"
+            >
               Subscribe
             </Link>
-            <Link href="/account" className="hover:text-brand">
+            <Link href="/account" className="inline-flex items-center py-2 hover:text-brand">
               Sign in
             </Link>
           </nav>
@@ -63,7 +70,7 @@ export function SiteHeader({
             <SearchTrigger />
             <Link
               href="/subscribe"
-              className="hidden rounded-sm bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark sm:inline-block"
+              className="hidden min-h-11 items-center rounded-sm bg-brand-solid px-4 text-sm font-semibold text-white transition-colors hover:bg-brand-solid-hover sm:inline-flex"
             >
               Subscribe
             </Link>

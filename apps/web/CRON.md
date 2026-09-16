@@ -14,10 +14,10 @@ and the real schedule comes from somewhere else.
 
 ## What the jobs need
 
-| Endpoint | Wanted | Why |
-| --- | --- | --- |
-| `/api/cron/publish-scheduled` | every minute | A story scheduled for 09:00 should publish at 09:00, not 09:30 |
-| `/api/cron/refresh-trending` | every 5 minutes | "Most read" going stale is survivable; being an hour stale is not |
+| Endpoint                      | Wanted          | Why                                                               |
+| ----------------------------- | --------------- | ----------------------------------------------------------------- |
+| `/api/cron/publish-scheduled` | every minute    | A story scheduled for 09:00 should publish at 09:00, not 09:30    |
+| `/api/cron/refresh-trending`  | every 5 minutes | "Most read" going stale is survivable; being an hour stale is not |
 
 Both are idempotent and safe to call as often as you like. `publish_due_articles()`
 publishes in a single `UPDATE ... RETURNING`, so two overlapping calls cannot

@@ -33,7 +33,7 @@ export function BreakingTicker({
   return (
     <section aria-label="Breaking news" className="border-b border-rule bg-paper-raised">
       <div className="mx-auto flex max-w-(--container-page) items-stretch gap-3 px-4">
-        <span className="flex shrink-0 items-center gap-2 bg-brand px-3 py-2 text-xs font-black tracking-wider text-white uppercase">
+        <span className="flex shrink-0 items-center gap-2 bg-brand-solid px-3 py-2 text-xs font-black tracking-wider text-white uppercase">
           <span className="relative flex size-2">
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-white opacity-75" />
             <span className="relative inline-flex size-2 rounded-full bg-white" />

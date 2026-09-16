@@ -115,7 +115,7 @@ export function NewsroomShell({
 
         <Link
           href="/articles/new"
-          className="rounded-sm bg-brand px-3 py-1.5 text-xs font-semibold text-white"
+          className="rounded-sm bg-brand-solid px-3 py-1.5 text-xs font-semibold text-white"
         >
           New
         </Link>
@@ -208,7 +208,7 @@ function Sidebar({
                     <span className="shrink-0">{item.icon}</span>
                     <span className="flex-1">{item.label}</span>
                     {badge > 0 ? (
-                      <span className="rounded-full bg-brand px-1.5 py-0.5 text-[10px] font-bold text-white">
+                      <span className="rounded-full bg-brand-solid px-1.5 py-0.5 text-[10px] font-bold text-white">
                         {badge > 99 ? '99+' : badge}
                       </span>
                     ) : null}

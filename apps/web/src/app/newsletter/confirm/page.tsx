@@ -69,7 +69,7 @@ function Result({ ok, message }: { ok: boolean; message: string }) {
 
       <Link
         href="/"
-        className="mt-6 inline-block rounded-sm bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark"
+        className="mt-6 inline-block rounded-sm bg-brand-solid px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-solid-hover"
       >
         Read today&rsquo;s news
       </Link>
