@@ -248,7 +248,13 @@ export async function getCurrentProfile(client: Client): Promise<ProfileRow | nu
 
   if (!user) return null;
 
-  const { data } = await client.from('profiles').select('*').eq('id', user.id).maybeSingle();
+  // A failed read here must not be reported as "this user has no profile".
+  // Callers treat null as exactly that and send the person to the no-access
+  // page telling them to contact an administrator — so a transient database
+  // error would appear to every signed-in reporter as their account having
+  // been revoked, mid-shift. Throwing shows an error page they can retry.
+  const { data, error } = await client.from('profiles').select('*').eq('id', user.id).maybeSingle();
+  if (error) throw error;
   return (data as ProfileRow | null) ?? null;
 }
 

@@ -92,12 +92,26 @@ export default async function RootLayout({ children }: { children: React.ReactNo
    * Chrome data is fetched in parallel and every piece is cached, so the
    * layout adds no per-request database work. A failure in any one of them
    * must not take down the site: a missing ticker is survivable, a blank page
-   * is not.
+   * is not. Degrading is the right call *here*, unlike on the homepage, where
+   * the same pattern cached an empty front page over the real one — the
+   * difference is that a header without its section bar still shows the
+   * reader the story they came for.
+   *
+   * But it must not be silent. Swallowing these without a word meant an
+   * outage showed up only as a subtly wrong page: the section nav vanished
+   * and the footer's Sections list emptied, with nothing in the logs.
    */
+  const degrade =
+    <T,>(what: string, fallback: T) =>
+    (error: unknown): T => {
+      console.error(`Layout chrome query failed: ${what}`, error);
+      return fallback;
+    };
+
   const [navigation, settings, breaking] = await Promise.all([
-    cachedNavigation().catch(() => []),
-    cachedSiteSettings().catch(() => null),
-    cachedBreaking(240).catch(() => []),
+    cachedNavigation().catch(degrade('navigation', [])),
+    cachedSiteSettings().catch(degrade('site settings', null)),
+    cachedBreaking(240).catch(degrade('breaking ticker', [])),
   ]);
 
   const locale = SITE.defaultLocale;

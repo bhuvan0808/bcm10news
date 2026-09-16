@@ -24,14 +24,39 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   /*
-   * A database blip must not take the front page down. Next.js keeps serving
-   * the last good static render, and the 60-second revalidate means the real
-   * homepage returns as soon as the read succeeds again — so falling back to
-   * the empty state here is a last resort, not the normal path.
+   * This deliberately does not catch.
+   *
+   * It used to. The reasoning was that a database blip must not take the front
+   * page down, and that Next would keep serving the last good render — but
+   * catching produced the exact opposite. A caught error returns a *successful*
+   * render of zero sections, ISR caches that, and the last good copy is gone.
+   * Every subsequent revalidation re-caches it. The front page of a news site
+   * then reads "No stories have been published yet" to every reader and to
+   * Google, which is far worse than being briefly unavailable: it is
+   * confidently wrong, and it outlives the outage that caused it.
+   *
+   * Letting it throw is what actually delivers the intended behaviour. ISR
+   * keeps serving the previously cached page when a background regeneration
+   * fails, and retries on the next revalidate. The empty state below is then
+   * what it claims to be — a genuinely empty newsroom, not a symptom.
+   *
+   * Observed in production: with Supabase paused, the homepage served the
+   * empty state while a published article existed.
+   *
+   * The one exception is `next build`. CI builds with placeholder credentials
+   * and no database by design — a build must not need production secrets, or
+   * it cannot run on a fork's pull request — so throwing there would fail
+   * every CI run rather than surface anything. A build-time fallback is also
+   * far narrower than the runtime one: it can only produce an empty page on a
+   * fresh deploy, and the 60-second revalidate replaces it as soon as the
+   * first read succeeds.
    */
   const sections = await cachedHomepage().catch((error) => {
-    console.error('Homepage query failed', error);
-    return [];
+    if (process.env['NEXT_PHASE'] === 'phase-production-build') {
+      console.warn('Homepage prerendered without a database; will fill in on first revalidate.');
+      return [];
+    }
+    throw error;
   });
 
   if (!sections.length) return <EmptyState />;

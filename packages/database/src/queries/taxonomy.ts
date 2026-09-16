@@ -57,12 +57,18 @@ export async function getNavigation(client: Client): Promise<NavCategory[]> {
 }
 
 export async function getCategoryBySlug(client: Client, slug: string): Promise<CategoryRow | null> {
-  const { data } = await client
+  const { data, error } = await client
     .from('categories')
     .select('*')
     .eq('slug', slug)
     .eq('is_active', true)
     .maybeSingle();
+  // Throw rather than report a failed query as "no such category". The caller
+  // turns null into notFound(), so swallowing the error makes a database
+  // outage return 404 for every real section on the site — and a 404 is the
+  // one status Google acts on destructively, de-indexing the URL instead of
+  // retrying it. A 500 is recoverable; a de-indexed section is not.
+  if (error) throw error;
   return (data as CategoryRow | null) ?? null;
 }
 
@@ -77,7 +83,8 @@ export async function getAllCategories(client: Client): Promise<CategoryRow[]> {
 }
 
 export async function getLocationBySlug(client: Client, slug: string): Promise<LocationRow | null> {
-  const { data } = await client.from('locations').select('*').eq('slug', slug).maybeSingle();
+  const { data, error } = await client.from('locations').select('*').eq('slug', slug).maybeSingle();
+  if (error) throw error; // See getCategoryBySlug.
   return (data as LocationRow | null) ?? null;
 }
 
@@ -92,7 +99,8 @@ export async function getFeaturedTags(client: Client, limit = 20): Promise<TagRo
 }
 
 export async function getTagBySlug(client: Client, slug: string): Promise<TagRow | null> {
-  const { data } = await client.from('tags').select('*').eq('slug', slug).maybeSingle();
+  const { data, error } = await client.from('tags').select('*').eq('slug', slug).maybeSingle();
+  if (error) throw error; // See getCategoryBySlug.
   return (data as TagRow | null) ?? null;
 }
 

@@ -133,19 +133,24 @@ export async function getArticleBySlug(client: Client, slug: string): Promise<Ar
 }
 
 async function getCoauthors(client: Client, articleId: string): Promise<Author[]> {
-  const { data } = await client
+  // Bylines are a credit, not a widget. Degrading quietly here would publish
+  // a story with a contributing reporter's name missing and no indication
+  // that anything went wrong, which is worse than the page failing.
+  const { data, error } = await client
     .from('article_coauthors')
     .select('profile_id, position')
     .eq('article_id', articleId)
     .order('position');
+  if (error) throw error;
 
   const ids = (data ?? []).map((row) => row.profile_id).filter(Boolean);
   if (!ids.length) return [];
 
-  const { data: authors } = await client
+  const { data: authors, error: authorsError } = await client
     .from('author_profiles')
     .select(AUTHOR_SELECT)
     .in('id', ids);
+  if (authorsError) throw authorsError;
   return (authors ?? []) as Author[];
 }
 
@@ -159,11 +164,15 @@ export async function getAuthorById(client: Client, id: string): Promise<Author 
 }
 
 export async function getAuthorBySlug(client: Client, slug: string): Promise<Author | null> {
-  const { data } = await client
+  const { data, error } = await client
     .from('author_profiles')
     .select(AUTHOR_SELECT)
     .eq('slug', slug)
     .maybeSingle();
+  // /author/[slug] turns null into notFound(). Reporting a failed query as
+  // "no such author" would 404 every reporter's page during an outage, and
+  // Google de-indexes a 404 rather than retrying it.
+  if (error) throw error;
   return (data as Author | null) ?? null;
 }
 
